@@ -8,8 +8,9 @@ class LocationScreen extends StatefulWidget {
   final String lastName;
   final String username;
   final String pictureURL;
+  final String accessKey;
 
-  LocationScreen({required this.firstName, required this.lastName, required this.username, required this.pictureURL});
+  LocationScreen({required this.firstName, required this.lastName, required this.username, required this.pictureURL, required this.accessKey});
 
   @override
   _LocationScreenState createState() => _LocationScreenState();
@@ -104,7 +105,7 @@ class _LocationScreenState extends State<LocationScreen> {
   void _redirectToAnotherScreen() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SecondScreen(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL)),
+      MaterialPageRoute(builder: (context) => SecondScreen(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL, accessKey: widget.accessKey)),
     );
   }
 

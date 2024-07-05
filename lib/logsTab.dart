@@ -8,8 +8,14 @@ class LogsTab extends StatefulWidget {
   final String lastName;
   final String firstName;
   final String pictureURL;
+  final String accessKey;
 
-  LogsTab({required this.username, required this.lastName, required this.firstName, required this.pictureURL});
+  LogsTab(
+      {required this.username,
+      required this.lastName,
+      required this.firstName,
+      required this.pictureURL,
+      required this.accessKey});
 
   @override
   _LogsTabState createState() => _LogsTabState();
@@ -27,18 +33,25 @@ class _LogsTabState extends State<LogsTab> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SecondScreen(username: widget.username, firstName: widget.firstName, lastName: widget.lastName, pictureURL: widget.pictureURL),
+          builder: (context) => SecondScreen(
+              username: widget.username,
+              firstName: widget.firstName,
+              lastName: widget.lastName,
+              pictureURL: widget.pictureURL,
+              accessKey: widget.accessKey),
         ),
       );
-    } else if (index == 1) {
-      // Navigate to LogsTab
-
     } else if (index == 2) {
       // Navigate to AccountTab
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AccountTab(username: widget.username, firstName: widget.firstName, lastName: widget.lastName, pictureURL: widget.pictureURL),
+          builder: (context) => AccountTab(
+              username: widget.username,
+              firstName: widget.firstName,
+              lastName: widget.lastName,
+              pictureURL: widget.pictureURL,
+              accessKey: widget.accessKey),
         ),
       );
     }
@@ -46,58 +59,64 @@ class _LogsTabState extends State<LogsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: AppBar(
-            title: Center(
-              child: Text(
-                'Logs',
-                style:
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    return WillPopScope(
+      onWillPop: () async {
+        // Returning false disables the back button
+        return false;
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
             ),
-            backgroundColor: Colors.transparent, // Make AppBar transparent
+            child: AppBar(
+              title: Center(
+                child: Text(
+                  'Logs',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+              backgroundColor: Colors.transparent, // Make AppBar transparent
 
-            automaticallyImplyLeading: false,
+              automaticallyImplyLeading: false,
+            ),
           ),
         ),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('allLogs')
-            .where('actorUsername',
-                isEqualTo:
-                    widget.username) // Filter logs where actorUsername matches username
-            .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('allLogs')
+              .where('actorUsername',
+                  isEqualTo: widget
+                      .username) // Filter logs where actorUsername matches username
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No logs found for ${widget.firstName}'));
-          }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(
+                  child: Text('No logs found for ${widget.firstName}'));
+            }
 
-          return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              var log = snapshot.data!.docs[index];
-              var logText = log['logText'] ?? 'No log text available';
-              var timestamp = log['timestamp']?.toDate().toString() ??
-                  'No timestamp available';
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                var log = snapshot.data!.docs[index];
+                var logText = log['logText'] ?? 'No log text available';
+                var timestamp = log['timestamp']?.toDate().toString() ??
+                    'No timestamp available';
 
-              return Column(
-                children: [
-                  Container(
+                return Column(
+                  children: [
+                    Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.vertical(
@@ -127,55 +146,55 @@ class _LogsTabState extends State<LogsTab> {
                         ),
                       ),
                     ),
-
-                  Divider()
+                    Divider()
+                  ],
+                );
+              },
+            );
+          },
+        ),
+        bottomNavigationBar: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue, Colors.purple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: BottomNavigationBar(
+                currentIndex: _selectedIndex,
+                selectedItemColor: Colors.blue[700],
+                unselectedItemColor: Colors.blue[200],
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.qr_code),
+                    label: 'QR Scanner',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.note_alt),
+                    label: 'Logs',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    label: 'Account',
+                  ),
                 ],
-              );
-            },
-          );
-        },
-      ),
-      bottomNavigationBar: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blue, Colors.purple],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                onTap: _onItemTapped,
               ),
             ),
-            child: BottomNavigationBar(
-              currentIndex: _selectedIndex,
-              selectedItemColor: Colors.blue[700],
-              unselectedItemColor: Colors.blue[200],
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.qr_code),
-                  label: 'QR Scanner',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.note_alt),
-                  label: 'Logs',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Account',
-                ),
-              ],
-              onTap: _onItemTapped,
+            Positioned(
+              left: MediaQuery.of(context).size.width / 3 * _selectedIndex,
+              bottom: 0,
+              child: Container(
+                width: MediaQuery.of(context).size.width / 3,
+                height: 3,
+                color: Colors.blue[700],
+              ),
             ),
-          ),
-          Positioned(
-            left: MediaQuery.of(context).size.width / 3 * _selectedIndex,
-            bottom: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width / 3,
-              height: 3,
-              color: Colors.blue[700],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -33,6 +33,7 @@ class _MainScreenState extends State<MainScreen> {
       String firstName = prefs.getString('firstName') ?? '';
       String pictureURL = prefs.getString('pictureURL') ?? '';
       String lastName = prefs.getString('lastName') ?? '';
+      String accessKey = prefs.getString('accessKey') ?? '';
 
       Navigator.pushReplacement(
         context,
@@ -42,6 +43,7 @@ class _MainScreenState extends State<MainScreen> {
             firstName: firstName,
             lastName: lastName,
             pictureURL: pictureURL,
+            accessKey: accessKey,
           ),
         ),
       );
@@ -73,6 +75,7 @@ class _MainScreenState extends State<MainScreen> {
         final firstName = userDoc['firstName'];
         final lastName = userDoc['lastName'];
         final pictureURL = userDoc['pictureURL'];
+        final accessKey = userDoc['accessKey'];
         final logInTime = DateTime.now();
         final docId = '$username';
 
@@ -95,6 +98,7 @@ class _MainScreenState extends State<MainScreen> {
         prefs.setString('firstName', firstName);
         prefs.setString('lastName', lastName);
         prefs.setString('pictureURL', pictureURL);
+        prefs.setString('accessKey', accessKey);
 
         // Login successful
         Navigator.pushReplacement(
@@ -105,6 +109,7 @@ class _MainScreenState extends State<MainScreen> {
               lastName: lastName,
               username: username,
               pictureURL: pictureURL,
+              accessKey: accessKey,
             ),
           ),
         );

@@ -10,8 +10,9 @@ class SecondScreen extends StatefulWidget {
   final String lastName;
   final String username;
   final String pictureURL;
+  final String accessKey;
 
-  SecondScreen({required this.firstName, required this.lastName, required this.username, required this.pictureURL});
+  SecondScreen({required this.firstName, required this.lastName, required this.username, required this.pictureURL, required this.accessKey});
 
   @override
   _SecondScreenState createState() => _SecondScreenState();
@@ -38,7 +39,7 @@ class _SecondScreenState extends State<SecondScreen> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              LogsTab(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL),
+              LogsTab(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL, accessKey: widget.accessKey),
         ),
       );
     } else if (index == 2) {
@@ -47,7 +48,7 @@ class _SecondScreenState extends State<SecondScreen> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              AccountTab(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL),
+              AccountTab(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL, accessKey: widget.accessKey),
         ),
       );
     }
@@ -147,7 +148,12 @@ class _SecondScreenState extends State<SecondScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        // Returning false disables the back button
+        return false;
+      },
+      child: Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: Container(
@@ -259,6 +265,7 @@ class _SecondScreenState extends State<SecondScreen> {
           ),
         ],
       ),
+    ),
     );
   }
 
