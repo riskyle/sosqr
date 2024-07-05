@@ -10,12 +10,11 @@ class AccountTab extends StatefulWidget {
   final String username;
   final String pictureURL;
 
-  AccountTab({
-    required this.firstName,
-    required this.lastName,
-    required this.username,
-    required this.pictureURL
-  });
+  AccountTab(
+      {required this.firstName,
+      required this.lastName,
+      required this.username,
+      required this.pictureURL});
 
   @override
   _AccountTabState createState() => _AccountTabState();
@@ -86,35 +85,71 @@ class _AccountTabState extends State<AccountTab> {
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.only(top: 80, bottom: 60, right: 20, left: 20),
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(45.0),
+                bottomRight: Radius.circular(45.0),
+              ),
               gradient: LinearGradient(
                 colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
             ),
             child: Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Container(
-                    width: 150, // Container width (radius * 2)
-                    height: 150, // Container height (radius * 2)
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 4.0, // Border width
+                Stack(
+                  children: [
+                    Container(
+                      width: 150, // Container width (radius * 2)
+                      height: 150, // Container height (radius * 2)
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 4.0, // Border width
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        radius: 75,
+                        backgroundImage: NetworkImage(widget.pictureURL),
                       ),
                     ),
-                    child: CircleAvatar(
-                      radius: 75,
-                      backgroundImage: NetworkImage(
-                          widget.pictureURL),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.camera_alt,
+                              size: 20.0,
+                              color: Colors
+                                  .white), // Adjust size and color as needed
+                          onPressed: () {
+                            // Add your onPressed code here!
+                          },
+                          padding: EdgeInsets.all(0), // To remove extra padding
+                          constraints: BoxConstraints(),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
+                SizedBox(height: 20),
                 Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -142,177 +177,194 @@ class _AccountTabState extends State<AccountTab> {
               ],
             ),
           ),
+          SizedBox(height: 20),
           Expanded(
             child: Container(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    //Account Information
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(30.0),
-                          bottom: Radius
-                              .zero, // This makes the bottom edges straight
-                        ),
-                        color: Colors.white,
-                      ),
-                      height: 100.0, // Adjust the height as needed
-                      margin: EdgeInsets.only(
-                          top: 30, left: 30, right: 30), // Example margin
-                      padding: EdgeInsets.all(10.0), // Example padding
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.person_search_outlined,
-                            size: 75, // Adjust the size of the icon as needed
-                            color: Colors
-                                .blue[700], // Adjust the color of the icon
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // Add spacing between the text widgets
-                                Text(
-                                  'Account \nInformation',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue[700]),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Container(
-                      color: Colors.grey[300],
-                      height: 100.0, // Adjust the height as needed
-                      margin: EdgeInsets.only(
-                          left: 30, right: 30), // Example margin
-                      padding: EdgeInsets.all(10.0), // Example padding
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.edit_note,
-                            size: 75, // Adjust the size of the icon as needed
-                            color: Colors
-                                .blue[700], // Adjust the color of the icon
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // Add spacing between the text widgets
-                                Text(
-                                  'Edit Personal \nDetails',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue[700]),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    //Accomplished Deliveries
-                    Container(
-                      color: Colors.white,
-                      height: 100.0, // Adjust the height as needed
-                      margin: EdgeInsets.only(
-                          left: 30, right: 30), // Example margin
-                      padding: EdgeInsets.all(10.0), // Example padding
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.checklist_outlined,
-                            size: 75, // Adjust the size of the icon as needed
-                            color: Colors
-                                .blue[700], // Adjust the color of the icon
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // Add spacing between the text widgets
-                                Text(
-                                  'Account \nApproval',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue[700]),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    //Log Out
-                    GestureDetector(
-                      onTap: () {
-                        _logout(context);
-                      },
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 40, right: 40, bottom: 60, top: 60),
                       child: Container(
-                        color: Colors.grey[300],
-                        height: 100.0, // Adjust the height as needed
-                        margin: EdgeInsets.only(
-                            left: 30, right: 30), // Example margin
-                        padding: EdgeInsets.all(10.0), // Example padding
-                        child: Row(
-                          children: [
-                            SizedBox(width: 10),
-                            Icon(
-                              Icons.logout_outlined,
-                              size: 75, // Adjust the size of the icon as needed
-                              color: Colors
-                                  .blue[700], // Adjust the color of the icon
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
                             ),
-                            SizedBox(width: 10),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                          ],
+                          borderRadius: BorderRadius.circular(45.0),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) {
+                                  return Colors.blue[200]!;
+                                }
+                                return Color(0xFF1F5EBD);
+                              },
+                            ),
+                            minimumSize: MaterialStateProperty.all<Size>(
+                                Size(double.infinity, 60)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(45.0),
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Row(
                                 children: [
-                                  // Add spacing between the text widgets
+                                  Icon(Icons.edit, color: Colors.white),
+                                  SizedBox(width: 10),
                                   Text(
-                                    'Logout',
+                                    'Edit Profile',
                                     style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Jost',
                                       fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue[700],
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
+                              Spacer(),
+                              Icon(Icons.arrow_forward_ios, color: Colors.white)
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    Container(
-                      height: 100.0, // Adjust the height as needed
-                      margin: EdgeInsets.only(
-                          left: 30, right: 30), // Example margin
-                      padding: EdgeInsets.all(10.0), // Example padding
-                      child: Image.asset('assets/SOS-logo.png', width: 20),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 40, right: 40, bottom: 60),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(45.0),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) {
+                                  return Colors.blue[200]!;
+                                }
+                                return Color(0xFF1F5EBD);
+                              },
+                            ),
+                            minimumSize: MaterialStateProperty.all<Size>(
+                                Size(double.infinity, 60)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(45.0),
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.library_add_check_sharp,
+                                      color: Colors.white),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Account Approval',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Jost',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Icon(Icons.arrow_forward_ios, color: Colors.white)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 40, right: 40, bottom: 60),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(45.0),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _logout(context);
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) {
+                                  return Colors.blue[200]!;
+                                }
+                                return Color(0xFF1F5EBD);
+                              },
+                            ),
+                            minimumSize: MaterialStateProperty.all<Size>(
+                                Size(double.infinity, 60)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(45.0),
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.logout_sharp, color: Colors.white),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Log out',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Jost',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
