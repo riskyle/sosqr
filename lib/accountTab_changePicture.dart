@@ -129,11 +129,18 @@ class _ChangePictureState extends State<ChangePicture> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    imageURL = widget.pictureURL;
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
             child: Stack(

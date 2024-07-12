@@ -13,6 +13,7 @@ class _AccountApprovalState extends State<AccountApproval> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(),
       body: StreamBuilder<QuerySnapshot>(
         stream:
@@ -91,9 +92,11 @@ class _AccountApprovalState extends State<AccountApproval> {
                                   );
                                 }).toList(),
                                 onChanged: (String? newValue) {
-                                  setState(() {
-                                    _selectedAccessMap[username] = newValue;
-                                  });
+                                  setState(
+                                    () {
+                                      _selectedAccessMap[username] = newValue;
+                                    },
+                                  );
                                 },
                               ),
                             ],
@@ -102,7 +105,6 @@ class _AccountApprovalState extends State<AccountApproval> {
                         Spacer(),
                         Row(
                           children: [
-
                             // Add user to the accepted users database
                             IconButton(
                               icon: Icon(Icons.check),
@@ -116,13 +118,15 @@ class _AccountApprovalState extends State<AccountApproval> {
                                   // Add user to 'users' collection
                                   await FirebaseFirestore.instance
                                       .collection('users')
-                                      .add({
+                                      .doc(userDoc.id)
+                                      .set({
                                     'username': username,
                                     'firstName': firstName,
                                     'lastName': lastName,
                                     'accessKey': accessKey,
                                     'password': password,
                                     'pictureURL': pictureURL,
+                                    'userDocID': userDoc.id,
                                   });
 
                                   // Remove user from 'usersPending' collection

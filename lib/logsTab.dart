@@ -9,13 +9,17 @@ class LogsTab extends StatefulWidget {
   final String firstName;
   final String pictureURL;
   final String accessKey;
+  final String userDocID;
+  final String password;
 
   LogsTab(
       {required this.username,
       required this.lastName,
       required this.firstName,
       required this.pictureURL,
-      required this.accessKey});
+      required this.accessKey,
+      required this.userDocID,
+      required this.password});
 
   @override
   _LogsTabState createState() => _LogsTabState();
@@ -23,6 +27,7 @@ class LogsTab extends StatefulWidget {
 
 class _LogsTabState extends State<LogsTab> {
   int _selectedIndex = 1;
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -38,7 +43,9 @@ class _LogsTabState extends State<LogsTab> {
               firstName: widget.firstName,
               lastName: widget.lastName,
               pictureURL: widget.pictureURL,
-              accessKey: widget.accessKey),
+              accessKey: widget.accessKey,
+          userDocID: widget.userDocID,
+          password: widget.password,),
         ),
       );
     } else if (index == 2) {
@@ -51,7 +58,9 @@ class _LogsTabState extends State<LogsTab> {
               firstName: widget.firstName,
               lastName: widget.lastName,
               pictureURL: widget.pictureURL,
-              accessKey: widget.accessKey),
+              accessKey: widget.accessKey,
+          userDocID: widget.userDocID,
+          password: widget.password),
         ),
       );
     }
@@ -65,6 +74,7 @@ class _LogsTabState extends State<LogsTab> {
         return false;
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
           child: Container(
@@ -92,9 +102,9 @@ class _LogsTabState extends State<LogsTab> {
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('allLogs')
-              .where('actorUsername',
+              .where('userDocID',
                   isEqualTo: widget
-                      .username) // Filter logs where actorUsername matches username
+                      .userDocID) // Filter logs where actorUsername matches username
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -123,18 +133,13 @@ class _LogsTabState extends State<LogsTab> {
                           top: Radius.circular(20.0),
                           bottom: Radius.circular(20.0),
                         ),
-                        color: Colors.blue[700],
-                        gradient: LinearGradient(
-                          colors: [Colors.blue, Colors.purple],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
+                        color: Colors.white,
                       ),
                       child: ListTile(
                         title: Center(
                           child: Text(
                             logText,
-                            style: TextStyle(fontSize: 18, color: Colors.white),
+                            style: TextStyle(fontSize: 18, color: Colors.black),
                           ),
                         ),
                         subtitle: Center(

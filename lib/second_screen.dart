@@ -11,8 +11,17 @@ class SecondScreen extends StatefulWidget {
   final String username;
   final String pictureURL;
   final String accessKey;
+  final String userDocID;
+  final String password;
 
-  SecondScreen({required this.firstName, required this.lastName, required this.username, required this.pictureURL, required this.accessKey});
+  SecondScreen(
+      {required this.firstName,
+      required this.lastName,
+      required this.username,
+      required this.pictureURL,
+      required this.accessKey,
+      required this.userDocID,
+      required this.password});
 
   @override
   _SecondScreenState createState() => _SecondScreenState();
@@ -27,6 +36,13 @@ class _SecondScreenState extends State<SecondScreen> {
   bool isScanning = false;
   bool isProcessing = false; // Flag to prevent multiple logs
 
+  Future<QuerySnapshot<Map<String, dynamic>>> getUserFuture() async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .where('userDocID', isEqualTo: widget.userDocID)
+        .get();
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -38,8 +54,14 @@ class _SecondScreenState extends State<SecondScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              LogsTab(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL, accessKey: widget.accessKey),
+          builder: (context) => LogsTab(
+              username: widget.username,
+              lastName: widget.lastName,
+              firstName: widget.firstName,
+              pictureURL: widget.pictureURL,
+              accessKey: widget.accessKey,
+              userDocID: widget.userDocID,
+          password: widget.password),
         ),
       );
     } else if (index == 2) {
@@ -47,8 +69,14 @@ class _SecondScreenState extends State<SecondScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              AccountTab(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL, accessKey: widget.accessKey),
+          builder: (context) => AccountTab(
+              username: widget.username,
+              lastName: widget.lastName,
+              firstName: widget.firstName,
+              pictureURL: widget.pictureURL,
+              accessKey: widget.accessKey,
+              userDocID: widget.userDocID,
+          password: widget.password),
         ),
       );
     }
@@ -65,6 +93,7 @@ class _SecondScreenState extends State<SecondScreen> {
       // Check if the QR code has already been scanned
       final scannedQuery = await FirebaseFirestore.instance
           .collection('allLogs')
+          .where('userDocID', isEqualTo: widget.userDocID)
           .where('timestamp', isEqualTo: DateTime.timestamp())
           .get();
 
@@ -110,7 +139,8 @@ class _SecondScreenState extends State<SecondScreen> {
       final logMessage = '${widget.firstName}$qrNote';
 
       await FirebaseFirestore.instance.collection('allLogs').add({
-        'actorUsername': widget.username,
+        'userDocID': widget.userDocID,
+        'username': widget.username,
         'logText': logMessage,
         'timestamp': Timestamp.now(), // Optionally include timestamp
       });
@@ -154,118 +184,121 @@ class _SecondScreenState extends State<SecondScreen> {
         return false;
       },
       child: Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: AppBar(
-            title: Center(
-              child: Text(
-                'QR Scanner',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-            backgroundColor: Colors.transparent, // Make AppBar transparent
-
-            automaticallyImplyLeading: false,
-          ),
-        ),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  isScanning
-                      ?  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(color: Color(0xFF0057FF),),
-                      SizedBox(height: 16),
-                      Text('Scanning in progress...'),
-                    ],
-                  )
-                      : ElevatedButton(
-                    onPressed: _startScanning,
-                    child: Text('Start Scanning'),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    (qrText != null) ? "" : 'Scan a code',
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    (qrNote != null)
-                        ? 'Note: ${widget.firstName}$qrNote'
-                        : 'No note found',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-      bottomNavigationBar: Stack(
-        children: [
-          Container(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.purple],
+                colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
-            child: BottomNavigationBar(
-              currentIndex: _selectedIndex,
-              selectedItemColor: Colors.blue[700],
-              unselectedItemColor: Colors.blue[200],
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.qr_code),
-                  label: 'QR Scanner',
+            child: AppBar(
+              title: Center(
+                child: Text(
+                  'QR Scanner',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.note_alt),
-                  label: 'Logs',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Account',
-                ),
-              ],
-              onTap: _onItemTapped,
+              ),
+              backgroundColor: Colors.transparent, // Make AppBar transparent
+
+              automaticallyImplyLeading: false,
             ),
           ),
-          Positioned(
-            left: MediaQuery.of(context).size.width / 3 * _selectedIndex,
-            bottom: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width / 3,
-              height: 3,
-              color: Colors.blue[700],
+        ),
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 5,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+              ),
             ),
-          ),
-        ],
+             Expanded(
+                  flex: 2,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        isScanning
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(
+                                    color: Color(0xFF0057FF),
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text('Scanning in progress...'),
+                                ],
+                              )
+                            : ElevatedButton(
+                                onPressed: _startScanning,
+                                child: Text('Start Scanning'),
+                              ),
+                        SizedBox(height: 20),
+                        Text(
+                          (qrText != null) ? "" : 'Scan a code',
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          (qrNote != null)
+                              ? 'Note: ${widget.firstName}$qrNote'
+                              : 'No note found',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+          ],
+        ),
+        bottomNavigationBar: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue, Colors.purple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: BottomNavigationBar(
+                currentIndex: _selectedIndex,
+                selectedItemColor: Colors.blue[700],
+                unselectedItemColor: Colors.blue[200],
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.qr_code),
+                    label: 'QR Scanner',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.note_alt),
+                    label: 'Logs',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    label: 'Account',
+                  ),
+                ],
+                onTap: _onItemTapped,
+              ),
+            ),
+            Positioned(
+              left: MediaQuery.of(context).size.width / 3 * _selectedIndex,
+              bottom: 0,
+              child: Container(
+                width: MediaQuery.of(context).size.width / 3,
+                height: 3,
+                color: Colors.blue[700],
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 

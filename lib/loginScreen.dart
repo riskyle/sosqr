@@ -34,6 +34,8 @@ class _MainScreenState extends State<MainScreen> {
       String pictureURL = prefs.getString('pictureURL') ?? '';
       String lastName = prefs.getString('lastName') ?? '';
       String accessKey = prefs.getString('accessKey') ?? '';
+      String userDocID = prefs.getString('userDocID') ?? '';
+      String password = prefs.getString('password') ?? '';
 
       Navigator.pushReplacement(
         context,
@@ -44,6 +46,8 @@ class _MainScreenState extends State<MainScreen> {
             lastName: lastName,
             pictureURL: pictureURL,
             accessKey: accessKey,
+            userDocID: userDocID,
+            password: password,
           ),
         ),
       );
@@ -78,6 +82,10 @@ class _MainScreenState extends State<MainScreen> {
         final accessKey = userDoc['accessKey'];
         final logInTime = DateTime.now();
         final docId = '$username';
+        final userDocID = userDoc['userDocID'];
+        final password = userDoc['password'];
+
+
 
 
         //Save the timestamps of log in and out of the user in the database
@@ -99,6 +107,9 @@ class _MainScreenState extends State<MainScreen> {
         prefs.setString('lastName', lastName);
         prefs.setString('pictureURL', pictureURL);
         prefs.setString('accessKey', accessKey);
+        prefs.setString('userDocID', userDocID);
+        prefs.setString('password', password);
+
 
         // Login successful
         Navigator.pushReplacement(
@@ -110,6 +121,8 @@ class _MainScreenState extends State<MainScreen> {
               username: username,
               pictureURL: pictureURL,
               accessKey: accessKey,
+              userDocID: userDocID,
+              password: password,
             ),
           ),
         );
@@ -263,7 +276,7 @@ class _MainScreenState extends State<MainScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.white, // Background color
                                 borderRadius: BorderRadius.circular(
-                                    45.0), // Rounded corners
+                                    10.0), // Rounded corners
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black
@@ -296,12 +309,12 @@ class _MainScreenState extends State<MainScreen> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide:
                                     BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(45.0),
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide:
                                     BorderSide(color: Colors.blue[500]!),
-                                    borderRadius: BorderRadius.circular(45.0),
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   filled: true,
                                   fillColor: Colors.white,
@@ -322,7 +335,7 @@ class _MainScreenState extends State<MainScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.white, // Background color
                                 borderRadius: BorderRadius.circular(
-                                    45.0), // Rounded corners
+                                    10.0), // Rounded corners
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black
@@ -370,12 +383,12 @@ class _MainScreenState extends State<MainScreen> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide:
                                     BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(45.0),
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide:
                                     BorderSide(color: Colors.blue[500]!),
-                                    borderRadius: BorderRadius.circular(45.0),
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
 
                                   filled: true,
@@ -413,7 +426,7 @@ class _MainScreenState extends State<MainScreen> {
                                     ),
                                   ],
                                   borderRadius:
-                                  BorderRadius.circular(45.0),
+                                  BorderRadius.circular(10.0),
                                 ),
                                 child: ElevatedButton(
                                   onPressed: () {
@@ -462,7 +475,7 @@ class _MainScreenState extends State<MainScreen> {
                                         RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(45.0),
+                                        BorderRadius.circular(10.0),
                                       ),
                                     ),
                                   ),

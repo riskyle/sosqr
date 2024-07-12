@@ -9,8 +9,11 @@ class LocationScreen extends StatefulWidget {
   final String username;
   final String pictureURL;
   final String accessKey;
+  final String userDocID;
+  final String password;
 
-  LocationScreen({required this.firstName, required this.lastName, required this.username, required this.pictureURL, required this.accessKey});
+
+  LocationScreen({required this.firstName, required this.lastName, required this.username, required this.pictureURL, required this.accessKey, required this.userDocID, required this.password});
 
   @override
   _LocationScreenState createState() => _LocationScreenState();
@@ -41,14 +44,64 @@ class _LocationScreenState extends State<LocationScreen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Enable Location Services'),
-          content: Text('Please enable location services to continue.'),
-          actions: <Widget>[
+          shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(45.0), // Customize the border radius here
+          ),
+          contentPadding: EdgeInsets.zero,
+          content: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: 300, // Set the maximum width
+                maxHeight: 150, // Set the maximum height
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize
+                    .min, // Ensure the column takes only necessary space
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(45.0),
+                        bottom: Radius.zero,
+                      ),
+                    ),
+                    height: 60,
+                    child: Center(
+                      child: Text('Enable Location Services', style: TextStyle(color: Colors.white, fontFamily: 'Jost', fontWeight: FontWeight.normal, fontSize: 22),),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Center(
+                      child: Text(
+                      'Please enable location services to continue!',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Jost',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
             TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                "OK",
+                style: TextStyle(
+                  color: Color(0xFF1F5EBD),
+                ),
+              ),
             ),
           ],
         );
@@ -105,7 +158,8 @@ class _LocationScreenState extends State<LocationScreen> {
   void _redirectToAnotherScreen() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SecondScreen(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL, accessKey: widget.accessKey)),
+      MaterialPageRoute(builder: (context) => SecondScreen(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL, accessKey: widget.accessKey, userDocID: widget.userDocID, password: widget.password
+      )),
     );
   }
 
@@ -133,7 +187,7 @@ class _LocationScreenState extends State<LocationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Location'),
+        title: Text('Location Check...'),
       ),
       body: Center(
         child: _currentPosition != null

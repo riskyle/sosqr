@@ -67,7 +67,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Text(
-                      'User already exists',
+                      'Username already taken. Please use another one.',
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'Jost',
@@ -94,6 +94,38 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
       );
     } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 10),
+                CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0057FF)),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Submitting application...',
+                  style: TextStyle(
+                      fontFamily: 'Jost',
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      // Wait for 2 seconds before closing the dialog and navigating
+      await Future.delayed(Duration(seconds: 2));
+
+      // Dismiss the dialog box
+      Navigator.of(context).pop();
+
+
       // Store user details in Firestore in usersPending collection with a random docID
       await FirebaseFirestore.instance.collection('usersPending').add({
         'firstName': firstName.text,
@@ -104,7 +136,7 @@ class _CreateAccountState extends State<CreateAccount> {
       // Proceed with signup
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text("Application sent. Wait for the admin's approval")),
+            content: Text("Application submitted. Wait for the admin's approval")),
       );
     }
   }
@@ -112,16 +144,9 @@ class _CreateAccountState extends State<CreateAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // Ensures the body extends behind the AppBar
+      extendBodyBehindAppBar:
+          true, // Ensures the body extends behind the AppBar
       appBar: AppBar(
-        title: Text(
-          'Create Account',
-          style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Jost',
-              fontSize: 24,
-              fontWeight: FontWeight.bold),
-        ),
         backgroundColor: Colors.transparent,
         elevation: 0, // Removes the shadow
         iconTheme: IconThemeData(color: Colors.white),
@@ -142,6 +167,19 @@ class _CreateAccountState extends State<CreateAccount> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(50.0),
+                    child: Text(
+                      'Create Account',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Jost',
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
                   Row(
                     children: [
                       SizedBox(width: 20),
@@ -195,29 +233,37 @@ class _CreateAccountState extends State<CreateAccount> {
                                   },
                                   controller: firstName,
                                   decoration: InputDecoration(
-                                    prefixIcon:
-                                        Icon(Icons.person, color: Colors.white),
+                                    prefixIcon: Icon(Icons.person,
+                                        color: Color(0xFF0057FF)),
                                     contentPadding:
                                         EdgeInsets.symmetric(vertical: 10.0),
-                                    labelText: 'First Name', // Placeholder text
-                                    labelStyle: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.normal),
-                                    enabledBorder: UnderlineInputBorder(
+                                    hintText: 'First Name',
+                                    hintStyle: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey[400],
+                                      fontFamily: 'Jost',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide:
+                                          BorderSide(color: Colors.transparent),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
                                       borderSide:
                                           BorderSide(color: Colors.transparent),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
                                       borderSide:
-                                          BorderSide(color: Colors.white),
+                                          BorderSide(color: Color(0xFF0057FF)),
                                     ),
                                     filled: true,
-                                    fillColor:
-                                        Color.fromARGB(50, 255, 255, 255),
+                                    fillColor: Colors.white,
                                   ),
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.normal,
                                     fontSize: 16.0,
                                     fontFamily: 'Jost',
                                     color: Color(0xFF1F5EBD),
@@ -251,25 +297,32 @@ class _CreateAccountState extends State<CreateAccount> {
                                         EdgeInsets.symmetric(vertical: 10.0),
                                     prefixIcon: Icon(Icons.person,
                                         color: Colors.transparent),
-                                    labelText: 'Last Name', // Placeholder text
-                                    labelStyle: TextStyle(
-                                        fontSize: 14,
+                                    hintText: 'Last Name', // Placeholder text
+                                    hintStyle: TextStyle(
+                                        fontSize: 16,
                                         fontWeight: FontWeight.normal,
-                                        color: Colors.white),
+                                        color: Colors.grey[400],
+                                        fontFamily: 'Jost'),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(color: Colors.transparent),
+                                    ),
                                     enabledBorder: UnderlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
                                       borderSide:
                                           BorderSide(color: Colors.transparent),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
                                       borderSide:
-                                          BorderSide(color: Colors.white),
+                                          BorderSide(color: Color(0xFF0057FF)),
                                     ),
                                     filled: true,
                                     fillColor:
-                                        Color.fromARGB(50, 255, 255, 255),
+                                        Colors.white
                                   ),
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.normal,
                                     fontSize: 16.0,
                                     fontFamily: 'Jost',
                                     color: Color(0xFF1F5EBD),
@@ -331,28 +384,34 @@ class _CreateAccountState extends State<CreateAccount> {
                       controller: _userNameController,
                       decoration: InputDecoration(
                         prefixIcon:
-                            Icon(FontAwesomeIcons.at, color: Colors.white),
+                            Icon(FontAwesomeIcons.at, color: Color(0xFF0057FF)),
                         contentPadding: EdgeInsets.symmetric(vertical: 10.0),
                         hintText: (firstName.text.isEmpty ||
                                 lastName.text.isEmpty)
                             ? 'Enter username'
                             : '${firstName.text.isNotEmpty ? firstName.text[0].toLowerCase() : ''}${lastName.text.toLowerCase()}', // Placeholder text
                         hintStyle: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal),
-                        // Customize border
+                            fontSize: 16,
+                            color: Colors.grey[400],
+                            fontWeight: FontWeight.normal,
+                        fontFamily: 'Jost'),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
                         enabledBorder: UnderlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                           borderSide: BorderSide(color: Colors.transparent),
                         ),
                         focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: Color(0xFF0057FF)),
                         ),
                         filled: true,
-                        fillColor: Color.fromARGB(50, 255, 255, 255),
+                        fillColor: Colors.white,
                       ),
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.normal,
                         fontSize: 16.0,
                         fontFamily: 'Jost',
                         color: Color(0xFF1F5EBD),
@@ -408,7 +467,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       controller: _passwordController,
                       obscureText: _obscureText,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock, color: Colors.white),
+                        prefixIcon: Icon(Icons.lock, color: Color(0xFF0057FF)),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscureText
@@ -424,21 +483,28 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         hintText: 'Password',
                         hintStyle: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
+                          fontSize: 16,
+                          color: Colors.grey[400],
+                          fontFamily: 'Jost',
                           fontWeight: FontWeight.normal,
                         ),
-                        enabledBorder: UnderlineInputBorder(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: Colors.transparent)
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                           borderSide: BorderSide(color: Colors.transparent),
                         ),
                         focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: Color(0xFF1F5EBD)),
                         ),
                         filled: true,
-                        fillColor: Color.fromARGB(50, 255, 255, 255),
+                        fillColor: Colors.white,
                       ),
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.normal,
                         fontSize: 16.0,
                         fontFamily: 'Jost',
                         color: Color(0xFF1F5EBD),
@@ -492,7 +558,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       controller: _confirmPasswordController,
                       obscureText: _obscureTextConfirm,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock, color: Colors.white),
+                        prefixIcon: Icon(Icons.lock, color: Color(0xFF1F5EBD)),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscureTextConfirm
@@ -508,21 +574,28 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         hintText: 'Confirm Password',
                         hintStyle: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
+                          fontSize: 16,
+                          color: Colors.grey[400],
+                          fontFamily: 'Jost',
                           fontWeight: FontWeight.normal,
                         ),
-                        enabledBorder: UnderlineInputBorder(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide(color: Colors.transparent)
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                           borderSide: BorderSide(color: Colors.transparent),
                         ),
                         focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: Color(0xFF1F5EBD)),
                         ),
                         filled: true,
-                        fillColor: Color.fromARGB(50, 255, 255, 255),
+                        fillColor: Colors.white,
                       ),
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.normal,
                         fontSize: 16.0,
                         fontFamily: 'Jost',
                         color: Color(0xFF1F5EBD),
@@ -543,7 +616,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             offset: Offset(0, 3),
                           ),
                         ],
-                        borderRadius: BorderRadius.circular(45.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: ElevatedButton(
                         onPressed: () {
@@ -566,7 +639,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(45.0),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
                         ),
