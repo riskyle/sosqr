@@ -195,15 +195,7 @@ class _SecondScreenState extends State<SecondScreen> {
               ),
             ),
             child: AppBar(
-              title: Center(
-                child: Text(
-                  'QR Scanner',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
               backgroundColor: Colors.transparent, // Make AppBar transparent
-
               automaticallyImplyLeading: false,
             ),
           ),

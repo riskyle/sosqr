@@ -14,7 +14,32 @@ class _AccountApprovalState extends State<AccountApproval> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: AppBar(
+            title: Center(
+              child: Text(
+                'Account Approval',
+                style: TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+            iconTheme: IconThemeData(
+              color: Colors.white, // Change your color here
+            ),
+            backgroundColor: Colors.transparent, // Make AppBar transparent
+            centerTitle: true,
+          ),
+        ),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream:
             FirebaseFirestore.instance.collection('usersPending').snapshots(),

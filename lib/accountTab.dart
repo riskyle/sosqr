@@ -4,12 +4,13 @@ import 'loginScreen.dart'; // Adjust path as per your project structure
 import 'second_screen.dart';
 import 'logsTab.dart';
 import 'accountTab_accountApproval.dart';
-import 'accountTab_editProfile.dart';
+import 'accountTab_changePassword.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'accountTab_changePicture.dart';
+import 'accountTab_allAccounts.dart';
 
 class AccountTab extends StatefulWidget {
   final String firstName;
@@ -172,8 +173,8 @@ class _AccountTabState extends State<AccountTab> {
                       EdgeInsets.only(top: 80, bottom: 60, right: 20, left: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(45.0),
-                      bottomRight: Radius.circular(45.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
                     ),
                     gradient: LinearGradient(
                       colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
@@ -328,6 +329,84 @@ class _AccountTabState extends State<AccountTab> {
                                 ),
                               ),
                             ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 40, right: 40, bottom: 60),
+                            child: widget.accessKey != 'basic'
+                                ? Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
+                                borderRadius: BorderRadius.circular(45.0),
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            AllAccounts()),
+                                  );
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty
+                                      .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                      if (states.contains(
+                                          MaterialState.pressed)) {
+                                        return Colors.blue[200]!;
+                                      }
+                                      return Color(0xFF1F5EBD);
+                                    },
+                                  ),
+                                  minimumSize:
+                                  MaterialStateProperty.all<Size>(
+                                    Size(double.infinity, 60),
+                                  ),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                            Icons.people,
+                                            color: Colors.white),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'All Accounts',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Jost',
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Icon(Icons.arrow_forward_ios,
+                                        color: Colors.white),
+                                  ],
+                                ),
+                              ),
+                            )
+                                : SizedBox(
+                                width:
+                                10), // Return an empty widget if accessKey is 'basic'
                           ),
                           Padding(
                             padding: const EdgeInsets.only(

@@ -86,16 +86,7 @@ class _LogsTabState extends State<LogsTab> {
               ),
             ),
             child: AppBar(
-              title: Center(
-                child: Text(
-                  'Logs',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
               backgroundColor: Colors.transparent, // Make AppBar transparent
-
-              automaticallyImplyLeading: false,
             ),
           ),
         ),
