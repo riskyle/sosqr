@@ -29,6 +29,12 @@ class _ChangePictureState extends State<ChangePicture> {
   XFile? _image = null;
   String imageURL = '';
 
+
+  @override
+  void initState() {
+    super.initState();
+    imageURL = widget.pictureURL;
+  }
   // For opening the camera to take a picture
   Future takePhoto() async {
     final XFile? image =
@@ -131,16 +137,15 @@ class _ChangePictureState extends State<ChangePicture> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    imageURL = widget.pictureURL;
-  }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -148,11 +153,10 @@ class _ChangePictureState extends State<ChangePicture> {
               child: Stack(
                 children: [
                   Container(
-                    width: 150, // Container width (radius * 2)
-                    height: 150, // Container height (radius * 2)
+                    width: 300, // Container width
+                    height: 300, // Container height
                     decoration: BoxDecoration(
                       color: Colors.black,
-                      shape: BoxShape.circle,
                       border: Border.all(
                         color: Colors.white,
                         width: 4.0, // Border width
@@ -162,28 +166,28 @@ class _ChangePictureState extends State<ChangePicture> {
                           color: Colors.black.withOpacity(0.1), // Shadow color
                           spreadRadius: 5, // Spread radius
                           blurRadius: 7, // Blur radius
-                          offset:
-                          Offset(0, 3), // Offset in the x and y directions
+                          offset: Offset(0, 3), // Offset in the x and y directions
                         ),
                       ],
                     ),
-                    child: CircleAvatar(
-                      radius: 100,
-                      backgroundImage: _image == null
-                          ? NetworkImage(imageURL) as ImageProvider
-                          : null,
-                      child: _image == null
-                          ? null
-                          : ClipOval(
-                        child: Image.file(
-                          File(_image!.path),
-                          fit: BoxFit.cover,
-                          width: 200,
-                          height: 200,
-                        ),
+                    child: _image == null
+                        ? Image.network(
+                      imageURL,
+                      fit: BoxFit.cover,
+                      width: 300,
+                      height: 300,
+                    )
+                        : ClipRRect(
+                      borderRadius: BorderRadius.circular(0), // No border radius for square
+                      child: Image.file(
+                        File(_image!.path),
+                        fit: BoxFit.cover,
+                        width: 300,
+                        height: 300,
                       ),
                     ),
                   ),
+
                   Positioned(
                     bottom: 0,
                     right: 0,

@@ -257,7 +257,7 @@ class _AccountTabState extends State<AccountTab> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 40, right: 40, bottom: 60, top: 60),
+                                left: 40, right: 40, bottom: 60, top: 20),
                             child: Container(
                               decoration: BoxDecoration(
                                 boxShadow: [

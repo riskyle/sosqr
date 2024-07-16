@@ -103,31 +103,13 @@ class _ChangePasswordState extends State<ChangePassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: AppBar(
-            title: Center(
-              child: Text(
-                'Change Password',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-            iconTheme: IconThemeData(
-              color: Colors.white, // Change your color here
-            ),
-            backgroundColor: Colors.transparent, // Make AppBar transparent
-            centerTitle: true,
-          ),
+      appBar: AppBar(
+        title: Text('Change Password', style: TextStyle(fontFamily: 'Jost', fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
+        backgroundColor: Color(0xFF0057FF),
+        iconTheme: IconThemeData(
+          color: Colors.white,
         ),
+        centerTitle: true,
       ),
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

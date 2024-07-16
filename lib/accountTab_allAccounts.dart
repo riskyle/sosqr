@@ -14,33 +14,13 @@ class _AllAccountsState extends State<AllAccounts> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: AppBar(
-            title: Center(
-              child: Text(
-                'All Accounts',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            iconTheme: IconThemeData(
-              color: Colors.white,
-            ),
-            backgroundColor: Colors.transparent,
-            centerTitle: true,
-          ),
+      appBar: AppBar(
+        title: Text('All Accounts', style: TextStyle(fontFamily: 'Jost', fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
+        backgroundColor: Color(0xFF0057FF),
+        iconTheme: IconThemeData(
+          color: Colors.white,
         ),
+        centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
@@ -128,6 +108,30 @@ class _AllAccountsState extends State<AllAccounts> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          builder: (context) => AllLogs(
+                            firstName: firstName,
+                            lastName: lastName,
+                            username: username,
+                            userDocID: userDocID,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text('Logs', style: TextStyle(fontFamily: 'Jost', fontSize: 16, fontWeight: FontWeight.normal, color: Colors.blue),),),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to EditProfileScreen with user data
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
                           builder: (context) => EditProfile(
                             firstName: firstName,
                             lastName: lastName,
@@ -157,6 +161,10 @@ class _AllAccountsState extends State<AllAccounts> {
     );
   }
 }
+
+
+
+/// EDIT PROFILE SA ALL ACCOUNTS
 
 class EditProfile extends StatefulWidget {
   final String firstName;
@@ -325,8 +333,14 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Edit Profile'),
+        title: Text('Edit Profile', style: TextStyle(fontFamily: 'Jost', fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
+        backgroundColor: Color(0xFF0057FF),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        centerTitle: true,
       ),
       body: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -695,3 +709,98 @@ class UpdateProfileDialog extends StatelessWidget {
     );
   }
 }
+
+class AllLogs extends StatefulWidget {
+  final String username;
+  final String lastName;
+  final String firstName;
+  final String userDocID;
+
+  AllLogs(
+      {required this.username,
+        required this.lastName,
+        required this.firstName,
+        required this.userDocID,});
+
+  @override
+  _AllLogsState createState() => _AllLogsState();
+}
+
+class _AllLogsState extends State<AllLogs> {
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text("${widget.firstName}'s Logs", style: TextStyle(fontFamily: 'Jost', fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
+          backgroundColor: Color(0xFF0057FF),
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+          centerTitle: true,
+        ),
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('allLogs')
+              .where('userDocID',
+              isEqualTo: widget
+                  .userDocID) // Filter logs where actorUsername matches username
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(
+                  child: Text('No logs found for ${widget.firstName}'));
+            }
+
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                var log = snapshot.data!.docs[index];
+                var logText = log['logText'] ?? 'No log text available';
+                var timestamp = log['timestamp']?.toDate().toString() ??
+                    'No timestamp available';
+
+                return Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20.0),
+                          bottom: Radius.circular(20.0),
+                        ),
+                        color: Colors.white,
+                      ),
+                      child: ListTile(
+                        title: Center(
+                          child: Text(
+                            logText,
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          ),
+                        ),
+                        subtitle: Center(
+                          child: Text(
+                            timestamp,
+                            style: TextStyle(
+                                fontSize: 16, fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider()
+                  ],
+                );
+              },
+            );
+          },
+        ),
+      );
+  }
+}
+

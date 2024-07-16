@@ -184,21 +184,9 @@ class _SecondScreenState extends State<SecondScreen> {
         return false;
       },
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: AppBar(
-              backgroundColor: Colors.transparent, // Make AppBar transparent
-              automaticallyImplyLeading: false,
-            ),
-          ),
+        appBar: AppBar(
+          backgroundColor: Color(0xFF0057FF),
+          automaticallyImplyLeading: false,
         ),
         body: Column(
           children: <Widget>[
