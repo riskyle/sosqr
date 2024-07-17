@@ -23,7 +23,7 @@ class _LocationScreenState extends State<LocationScreen> {
   Position? _currentPosition; // Initialize with null
   final double targetLatitude = 10.316040151942078;
   final double targetLongitude = 123.90930328276583;
-  final double thresholdDistanceKm = 2.0; // 2 km threshold
+  final double thresholdDistanceKm = 2.0; // 2 km threshold,
 
   @override
   void initState() {

@@ -24,6 +24,8 @@ class _MainScreenState extends State<MainScreen> {
     checkLoggedIn();
   }
 
+  // Checks if a user  is already logged in/hasn't logged out when closing the app. If so, then di na siya required to log in his/her credentials again and
+  // redirect siya dayon to location check nga screen
   Future<void> checkLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
@@ -147,13 +149,15 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+
+  // Dialog box if invalid or pending for approval ang account
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius:
-          BorderRadius.circular(45.0), // Customize the border radius here
+          BorderRadius.circular(10.0), // Customize the border radius here
         ),
         contentPadding: EdgeInsets.zero,
         content: SingleChildScrollView(
@@ -174,7 +178,7 @@ class _MainScreenState extends State<MainScreen> {
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(45.0),
+                      top: Radius.circular(10.0),
                       bottom: Radius.zero,
                     ),
                   ),
@@ -215,6 +219,8 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+
+  // LOGIN SCREEN
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -303,7 +309,7 @@ class _MainScreenState extends State<MainScreen> {
                                   hintText: 'Enter username',
                                   hintStyle: TextStyle(
                                     fontSize: 16.0,
-                                    color: Colors.grey[400],
+                                    color: Colors.grey[300],
                                     fontFamily: 'Jost',
                                   ),
                                   enabledBorder: OutlineInputBorder(
@@ -377,7 +383,7 @@ class _MainScreenState extends State<MainScreen> {
                                   hintText: 'Enter password',
                                   hintStyle: TextStyle(
                                     fontSize: 16.0,
-                                    color: Colors.grey[400],
+                                    color: Colors.grey[300],
                                     fontFamily: 'Jost',
                                   ),
                                   enabledBorder: OutlineInputBorder(
@@ -463,9 +469,9 @@ class _MainScreenState extends State<MainScreen> {
                                           (Set<MaterialState> states) {
                                         if (states.contains(
                                             MaterialState.pressed)) {
-                                          return Colors.blue[200]!;
+                                          return Colors.grey[200]!;
                                         }
-                                        return Color(0xFF1F5EBD);
+                                        return Colors.blue[300]!;
                                       },
                                     ),
                                     minimumSize:

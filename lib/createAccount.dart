@@ -33,7 +33,7 @@ class _CreateAccountState extends State<CreateAccount> {
         builder: (context) => AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius:
-                BorderRadius.circular(45.0), // Customize the border radius here
+                BorderRadius.circular(10.0), // Customize the border radius here
           ),
           contentPadding: EdgeInsets.zero,
           content: SingleChildScrollView(
@@ -54,7 +54,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(45.0),
+                        top: Radius.circular(10.0),
                         bottom: Radius.zero,
                       ),
                     ),
@@ -98,6 +98,10 @@ class _CreateAccountState extends State<CreateAccount> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(10.0), // Customize the border radius here
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -197,7 +201,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         child: Text(
                           '*',
                           style: TextStyle(
-                            color: Colors.red,
+                            color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -240,7 +244,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                     hintText: 'First Name',
                                     hintStyle: TextStyle(
                                       fontSize: 16,
-                                      color: Colors.grey[400],
+                                      color: Colors.grey[300],
                                       fontFamily: 'Jost',
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -301,7 +305,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                     hintStyle: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.normal,
-                                        color: Colors.grey[400],
+                                        color: Colors.grey[300],
                                         fontFamily: 'Jost'),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
@@ -353,7 +357,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         child: Text(
                           '*',
                           style: TextStyle(
-                            color: Colors.red,
+                            color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -392,7 +396,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             : '${firstName.text.isNotEmpty ? firstName.text[0].toLowerCase() : ''}${lastName.text.toLowerCase()}', // Placeholder text
                         hintStyle: TextStyle(
                             fontSize: 16,
-                            color: Colors.grey[400],
+                            color: Colors.grey[300],
                             fontWeight: FontWeight.normal,
                         fontFamily: 'Jost'),
                         border: OutlineInputBorder(
@@ -436,7 +440,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         child: Text(
                           '*',
                           style: TextStyle(
-                            color: Colors.red,
+                            color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -484,7 +488,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         hintText: 'Password',
                         hintStyle: TextStyle(
                           fontSize: 16,
-                          color: Colors.grey[400],
+                          color: Colors.grey[300],
                           fontFamily: 'Jost',
                           fontWeight: FontWeight.normal,
                         ),
@@ -529,7 +533,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         child: Text(
                           '*',
                           style: TextStyle(
-                            color: Colors.red,
+                            color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -575,7 +579,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         hintText: 'Confirm Password',
                         hintStyle: TextStyle(
                           fontSize: 16,
-                          color: Colors.grey[400],
+                          color: Colors.grey[300],
                           fontFamily: 'Jost',
                           fontWeight: FontWeight.normal,
                         ),

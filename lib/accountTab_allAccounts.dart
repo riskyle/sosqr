@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class AllAccounts extends StatefulWidget {
   @override
   _AllAccountsState createState() => _AllAccountsState();
@@ -15,7 +14,12 @@ class _AllAccountsState extends State<AllAccounts> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('All Accounts', style: TextStyle(fontFamily: 'Jost', fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
+        title: Text('All Accounts',
+            style: TextStyle(
+                fontFamily: 'Jost',
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white)),
         backgroundColor: Color(0xFF0057FF),
         iconTheme: IconThemeData(
           color: Colors.white,
@@ -61,8 +65,8 @@ class _AllAccountsState extends State<AllAccounts> {
                         SizedBox(width: 20),
                         CircleAvatar(
                           radius: 50,
-                          backgroundImage:
-                          NetworkImage(pictureURL), // Replace with your actual image URL
+                          backgroundImage: NetworkImage(
+                              pictureURL), // Replace with your actual image URL
                         ),
                         SizedBox(width: 20),
                         Container(
@@ -122,7 +126,15 @@ class _AllAccountsState extends State<AllAccounts> {
                         Spacer(),
                         Padding(
                           padding: EdgeInsets.all(10),
-                          child: Text('Logs', style: TextStyle(fontFamily: 'Jost', fontSize: 16, fontWeight: FontWeight.normal, color: Colors.blue),),),
+                          child: Text(
+                            'Logs',
+                            style: TextStyle(
+                                fontFamily: 'Jost',
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.blue),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -147,7 +159,15 @@ class _AllAccountsState extends State<AllAccounts> {
                         Spacer(),
                         Padding(
                           padding: EdgeInsets.all(10),
-                        child: Text('Edit Profile', style: TextStyle(fontFamily: 'Jost', fontSize: 16, fontWeight: FontWeight.normal, color: Colors.blue),),),
+                          child: Text(
+                            'Edit Profile',
+                            style: TextStyle(
+                                fontFamily: 'Jost',
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.blue),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -161,8 +181,6 @@ class _AllAccountsState extends State<AllAccounts> {
     );
   }
 }
-
-
 
 /// EDIT PROFILE SA ALL ACCOUNTS
 
@@ -311,7 +329,6 @@ class _EditProfileState extends State<EditProfile> {
           print('No user found with password: ${widget.password}');
         }
       }
-
     } catch (e) {
       print('Error updating: $e');
     } finally {
@@ -329,13 +346,17 @@ class _EditProfileState extends State<EditProfile> {
     _password.text = widget.password;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Edit Profile', style: TextStyle(fontFamily: 'Jost', fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
+        title: Text('Edit Profile',
+            style: TextStyle(
+                fontFamily: 'Jost',
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white)),
         backgroundColor: Color(0xFF0057FF),
         iconTheme: IconThemeData(
           color: Colors.white,
@@ -343,300 +364,332 @@ class _EditProfileState extends State<EditProfile> {
         centerTitle: true,
       ),
       body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // First Name
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(width: 30),
-            Text(
-              'First Name',
-              style: TextStyle(
-                fontFamily: 'Jost',
-                color: Color(0xFF0057FF),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-
-        Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-          child: TextFormField(
-            onChanged: (value) {
-              setState(() {});
-            },
-            controller: _firstName,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.person,
-                color: Color(0xFF0057FF),
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-              hintText: 'Enter first name', // Placeholder text
-              hintStyle: TextStyle(
-                color: Colors.grey[300],
-                fontWeight: FontWeight.normal,
-              ),
-              // Customize border
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF0057FF)),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-            ),
-            style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Jost',
-                fontWeight: FontWeight.normal,
-                fontSize: 16),
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(),
           ),
-        ),
+          Expanded(
+            flex: 5,
+            child: Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // First Name
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 30),
+                        Text(
+                          'First Name',
+                          style: TextStyle(
+                            fontFamily: 'Jost',
+                            color: Color(0xFF0057FF),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
 
-        SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                      child: TextFormField(
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        controller: _firstName,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: Color(0xFF0057FF),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                          hintText: 'Enter first name', // Placeholder text
+                          hintStyle: TextStyle(
+                            color: Colors.grey[300],
+                            fontWeight: FontWeight.normal,
+                          ),
+                          // Customize border
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF0057FF)),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Jost',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16),
+                      ),
+                    ),
 
-        // Last Name
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(width: 30),
-            Text(
-              'Last Name',
-              style: TextStyle(
-                fontFamily: 'Jost',
-                color: Color(0xFF0057FF),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-          child: TextFormField(
-            onChanged: (value) {
-              setState(() {});
-            },
-            controller: _lastName,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.person,
-                color: Color(0xFF0057FF),
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-              hintText: 'Enter last name', // Placeholder text
-              hintStyle: TextStyle(
-                color: Colors.grey[300],
-                fontWeight: FontWeight.normal,
-              ),
-              // Customize border
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF0057FF)),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-            ),
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontFamily: 'Jost',
-                fontWeight: FontWeight.normal),
-          ),
-        ),
+                    SizedBox(height: 20),
 
-        SizedBox(height: 20),
+                    // Last Name
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 30),
+                        Text(
+                          'Last Name',
+                          style: TextStyle(
+                            fontFamily: 'Jost',
+                            color: Color(0xFF0057FF),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                      child: TextFormField(
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        controller: _lastName,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: Color(0xFF0057FF),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                          hintText: 'Enter last name', // Placeholder text
+                          hintStyle: TextStyle(
+                            color: Colors.grey[300],
+                            fontWeight: FontWeight.normal,
+                          ),
+                          // Customize border
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF0057FF)),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontFamily: 'Jost',
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ),
 
-        // Username
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(width: 30),
-            Text(
-              'Username',
-              style: TextStyle(
-                fontFamily: 'Jost',
-                color: Color(0xFF0057FF),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-          child: TextFormField(
-            onChanged: (value) {
-              setState(() {});
-            },
-            controller: _username,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                FontAwesomeIcons.at,
-                color: Color(0xFF0057FF),
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-              hintText: 'Enter username', // Placeholder text
-              hintStyle: TextStyle(
-                color: Colors.grey[300],
-                fontWeight: FontWeight.normal,
-              ),
-              // Customize border
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF0057FF)),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-            ),
-            style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Jost',
-                fontWeight: FontWeight.normal,
-                fontSize: 16),
-          ),
-        ),
+                    SizedBox(height: 20),
 
-        SizedBox(height: 20),
+                    // Username
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 30),
+                        Text(
+                          'Username',
+                          style: TextStyle(
+                            fontFamily: 'Jost',
+                            color: Color(0xFF0057FF),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                      child: TextFormField(
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        controller: _username,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            FontAwesomeIcons.at,
+                            color: Color(0xFF0057FF),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                          hintText: 'Enter username', // Placeholder text
+                          hintStyle: TextStyle(
+                            color: Colors.grey[300],
+                            fontWeight: FontWeight.normal,
+                          ),
+                          // Customize border
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF0057FF)),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Jost',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16),
+                      ),
+                    ),
 
-      // Password
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(width: 30),
-            Text(
-              'Password',
-              style: TextStyle(
-                fontFamily: 'Jost',
-                color: Color(0xFF0057FF),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-          child: TextFormField(
-            onChanged: (value) {
-              setState(() {});
-            },
-            controller: _password,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.lock,
-                color: Color(0xFF0057FF),
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-              hintText: 'Enter password', // Placeholder text
-              hintStyle: TextStyle(
-                color: Colors.grey[300],
-                fontWeight: FontWeight.normal,
-              ),
-              // Customize border
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF0057FF)),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-            ),
-            style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Jost',
-                fontWeight: FontWeight.normal,
-                fontSize: 16),
-          ),
-        ),
-        Padding(
-          padding:
-          const EdgeInsets.only(top: 60, left: 40, right: 40, bottom: 60),
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
+                    SizedBox(height: 20),
+
+                    // Password
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 30),
+                        Text(
+                          'Password',
+                          style: TextStyle(
+                            fontFamily: 'Jost',
+                            color: Color(0xFF0057FF),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                      child: TextFormField(
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        controller: _password,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: Color(0xFF0057FF),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                          hintText: 'Enter password', // Placeholder text
+                          hintStyle: TextStyle(
+                            color: Colors.grey[300],
+                            fontWeight: FontWeight.normal,
+                          ),
+                          // Customize border
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF0057FF)),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Jost',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 60, left: 40, right: 40, bottom: 60),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            String checkFirstName = _firstName.text.trim();
+                            String checkLastName = _lastName.text.trim();
+                            String checkUsername = _username.text.trim();
+                            String checkPassword = _password.text.trim();
+
+                            if (checkFirstName.isEmpty ||
+                                checkLastName.isEmpty ||
+                                checkUsername.isEmpty ||
+                                checkPassword.isEmpty) {
+                              String message =
+                                  'Please fill out all necessary fields.';
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    UpdateProfileDialog(message: message),
+                              );
+                            } else if (checkFirstName == widget.firstName &&
+                                checkLastName == widget.lastName &&
+                                checkUsername == widget.username &&
+                                checkPassword == widget.password) {
+                              String message = 'No changes were made.';
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    UpdateProfileDialog(message: message),
+                              );
+                            } else {
+                              updateProfile();
+                            }
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                String checkFirstName = _firstName.text.trim();
+                                String checkLastName = _lastName.text.trim();
+                                String checkUsername = _username.text.trim();
+                                String checkPassword = _password.text.trim();
+
+                                if (checkFirstName.isEmpty ||
+                                    checkLastName.isEmpty ||
+                                    checkUsername.isEmpty ||
+                                    checkPassword.isEmpty) {
+                                  return Colors.grey;
+                                } else if (states
+                                    .contains(MaterialState.pressed)) {
+                                  return Colors.blue[200]!;
+                                }
+                                return Color(0xFF1F5EBD);
+                              },
+                            ),
+                            minimumSize:
+                                MaterialStateProperty.all<Size>(Size(200, 60)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            'UPDATE',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Jost',
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: ElevatedButton(
-              onPressed: () {
-                String checkFirstName = _firstName.text.trim();
-                String checkLastName = _lastName.text.trim();
-                String checkUsername = _username.text.trim();
-                String checkPassword = _password.text.trim();
-
-
-                if (checkFirstName.isEmpty ||
-                    checkLastName.isEmpty ||
-                    checkUsername.isEmpty ||
-                    checkPassword.isEmpty) {
-
-                  String message = 'Please fill out all necessary fields.';
-                  showDialog(
-                    context: context,
-                    builder: (context) =>
-                        UpdateProfileDialog(message: message),
-                  );
-                } else {
-                  updateProfile();
-                }
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        String checkFirstName = _firstName.text.trim();
-                        String checkLastName = _lastName.text.trim();
-                        String checkUsername = _username.text.trim();
-                        String checkPassword = _password.text.trim();
-
-                        if (checkFirstName.isEmpty ||
-                            checkLastName.isEmpty ||
-                            checkUsername.isEmpty ||
-                            checkPassword.isEmpty) {
-                      return Colors.grey;
-                    } else if (states.contains(MaterialState.pressed)) {
-                      return Colors.blue[200]!;
-                    }
-                    return Color(0xFF1F5EBD);
-                  },
-                ),
-                minimumSize: MaterialStateProperty.all<Size>(Size(200, 60)),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-              child: Text(
-                'UPDATE',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Jost',
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                ),
               ),
             ),
           ),
-        ),
-      ],
-    ),
+          Expanded(
+            flex: 1,
+            child: Container(),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -644,13 +697,15 @@ class _EditProfileState extends State<EditProfile> {
 class UpdateProfileDialog extends StatelessWidget {
   final String message;
 
-  const UpdateProfileDialog({Key? key, required this.message}) : super(key: key);
+  const UpdateProfileDialog({Key? key, required this.message})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0), // Customize the border radius here
+        borderRadius:
+            BorderRadius.circular(10.0), // Customize the border radius here
       ),
       contentPadding: EdgeInsets.zero,
       content: SingleChildScrollView(
@@ -660,7 +715,8 @@ class UpdateProfileDialog extends StatelessWidget {
             maxHeight: 150, // Set the maximum height
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Ensure the column takes only necessary space
+            mainAxisSize: MainAxisSize
+                .min, // Ensure the column takes only necessary space
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -676,7 +732,8 @@ class UpdateProfileDialog extends StatelessWidget {
                 ),
                 height: 60,
                 child: Center(
-                  child: Icon(Icons.error_outline_sharp, color: Colors.white, size: 30),
+                  child: Icon(Icons.error_outline_sharp,
+                      color: Colors.white, size: 30),
                 ),
               ),
               Padding(
@@ -716,91 +773,93 @@ class AllLogs extends StatefulWidget {
   final String firstName;
   final String userDocID;
 
-  AllLogs(
-      {required this.username,
-        required this.lastName,
-        required this.firstName,
-        required this.userDocID,});
+  AllLogs({
+    required this.username,
+    required this.lastName,
+    required this.firstName,
+    required this.userDocID,
+  });
 
   @override
   _AllLogsState createState() => _AllLogsState();
 }
 
 class _AllLogsState extends State<AllLogs> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text("${widget.firstName}'s Logs", style: TextStyle(fontFamily: 'Jost', fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-          backgroundColor: Color(0xFF0057FF),
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-          centerTitle: true,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text("${widget.firstName}'s Logs",
+            style: TextStyle(
+                fontFamily: 'Jost',
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white)),
+        backgroundColor: Color(0xFF0057FF),
+        iconTheme: IconThemeData(
+          color: Colors.white,
         ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('allLogs')
-              .where('userDocID',
-              isEqualTo: widget
-                  .userDocID) // Filter logs where actorUsername matches username
-              .snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
+        centerTitle: true,
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('allLogs')
+            .where('userDocID',
+                isEqualTo: widget
+                    .userDocID) // Filter logs where actorUsername matches username
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return Center(
-                  child: Text('No logs found for ${widget.firstName}'));
-            }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('No logs found for ${widget.firstName}'));
+          }
 
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                var log = snapshot.data!.docs[index];
-                var logText = log['logText'] ?? 'No log text available';
-                var timestamp = log['timestamp']?.toDate().toString() ??
-                    'No timestamp available';
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              var log = snapshot.data!.docs[index];
+              var logText = log['logText'] ?? 'No log text available';
+              var timestamp = log['timestamp']?.toDate().toString() ??
+                  'No timestamp available';
 
-                return Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20.0),
-                          bottom: Radius.circular(20.0),
-                        ),
-                        color: Colors.white,
+              return Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20.0),
+                        bottom: Radius.circular(20.0),
                       ),
-                      child: ListTile(
-                        title: Center(
-                          child: Text(
-                            logText,
-                            style: TextStyle(fontSize: 18, color: Colors.black),
-                          ),
+                      color: Colors.white,
+                    ),
+                    child: ListTile(
+                      title: Center(
+                        child: Text(
+                          logText,
+                          style: TextStyle(fontSize: 18, color: Colors.black),
                         ),
-                        subtitle: Center(
-                          child: Text(
-                            timestamp,
-                            style: TextStyle(
-                                fontSize: 16, fontStyle: FontStyle.italic),
-                          ),
+                      ),
+                      subtitle: Center(
+                        child: Text(
+                          timestamp,
+                          style: TextStyle(
+                              fontSize: 16, fontStyle: FontStyle.italic),
                         ),
                       ),
                     ),
-                    Divider()
-                  ],
-                );
-              },
-            );
-          },
-        ),
-      );
+                  ),
+                  Divider()
+                ],
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }
-

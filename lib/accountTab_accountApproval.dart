@@ -15,7 +15,12 @@ class _AccountApprovalState extends State<AccountApproval> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Account Approval', style: TextStyle(fontFamily: 'Jost', fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
+        title: Text('Account Approval',
+            style: TextStyle(
+                fontFamily: 'Jost',
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white)),
         backgroundColor: Color(0xFF0057FF),
         iconTheme: IconThemeData(
           color: Colors.white,
@@ -113,51 +118,411 @@ class _AccountApprovalState extends State<AccountApproval> {
                         Row(
                           children: [
                             // Add user to the accepted users database
-                            IconButton(
-                              icon: Icon(Icons.check),
-                              color: Colors.green,
-                              iconSize: 25,
-                              tooltip: 'Accept',
-                              onPressed: () async {
-                                String? accessKey =
-                                    _selectedAccessMap[username];
-                                if (accessKey != null) {
-                                  // Add user to 'users' collection
-                                  await FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(userDoc.id)
-                                      .set({
-                                    'username': username,
-                                    'firstName': firstName,
-                                    'lastName': lastName,
-                                    'accessKey': accessKey,
-                                    'password': password,
-                                    'pictureURL': pictureURL,
-                                    'userDocID': userDoc.id,
-                                  });
+                            Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.green[700],
+                                  shape: BoxShape.circle),
+                              child: IconButton(
+                                icon: Icon(Icons.check),
+                                color: Colors.white,
+                                iconSize: 15,
+                                tooltip: 'Accept',
+                                onPressed: () async {
+                                  String? accessKey =
+                                      _selectedAccessMap[username];
+                                  if (accessKey != null) {
 
-                                  // Remove user from 'usersPending' collection
-                                  await FirebaseFirestore.instance
-                                      .collection('usersPending')
-                                      .doc(userDoc.id)
-                                      .delete();
-                                }
-                              },
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              10.0), // Customize the border radius here
+                                        ),
+                                        contentPadding: EdgeInsets.zero,
+                                        content: SingleChildScrollView(
+                                          child: ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                              maxWidth:
+                                                  300, // Set the maximum width
+                                              maxHeight:
+                                                  150, // Set the maximum height
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize
+                                                  .min, // Ensure the column takes only necessary space
+                                              children: [
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                      colors: [
+                                                        Color(0xFF00E5E5),
+                                                        Color(0xFF0057FF)
+                                                      ],
+                                                      begin: Alignment.topLeft,
+                                                      end:
+                                                          Alignment.bottomRight,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.vertical(
+                                                      top:
+                                                          Radius.circular(10.0),
+                                                      bottom: Radius.zero,
+                                                    ),
+                                                  ),
+                                                  height: 60,
+                                                  child: Center(
+                                                    child: Icon(
+                                                        Icons
+                                                            .error_outline_sharp,
+                                                        color: Colors.white,
+                                                        size: 30),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      20.0),
+                                                  child: Text(
+                                                    'Approve user?',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontFamily: 'Jost',
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () async {
+                                              // Add user to 'users' collection
+                                              await FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(userDoc.id)
+                                                  .set({
+                                                'username': username,
+                                                'firstName': firstName,
+                                                'lastName': lastName,
+                                                'accessKey': accessKey,
+                                                'password': password,
+                                                'pictureURL': pictureURL,
+                                                'userDocID': userDoc.id,
+                                              });
+
+                                              // Remove user from 'usersPending' collection
+                                              await FirebaseFirestore.instance
+                                                  .collection('usersPending')
+                                                  .doc(userDoc.id)
+                                                  .delete();
+
+                                              // Show dialog box after the above operations are completed
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius.circular(10.0), // Customize the border radius here
+                                                    ),
+                                                    contentPadding: EdgeInsets.zero,
+                                                    content: SingleChildScrollView(
+                                                      child: ConstrainedBox(
+                                                        constraints: BoxConstraints(
+                                                          maxWidth: 300, // Set the maximum width
+                                                          maxHeight: 150, // Set the maximum height
+                                                        ),
+                                                        child: Column(
+                                                          mainAxisSize: MainAxisSize
+                                                              .min, // Ensure the column takes only necessary space
+                                                          children: [
+                                                            Container(
+                                                              decoration: BoxDecoration(
+                                                                gradient: LinearGradient(
+                                                                  colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
+                                                                  begin: Alignment.topLeft,
+                                                                  end: Alignment.bottomRight,
+                                                                ),
+                                                                borderRadius: BorderRadius.vertical(
+                                                                  top: Radius.circular(10.0),
+                                                                  bottom: Radius.zero,
+                                                                ),
+                                                              ),
+                                                              height: 60,
+                                                              child: Center(
+                                                                child: Icon(Icons.check_circle,
+                                                                    color: Colors.white, size: 30),
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.all(20.0),
+                                                              child: Text(
+                                                                'The user has been added.',
+                                                                style: TextStyle(
+                                                                  color: Colors.black,
+                                                                  fontFamily: 'Jost',
+                                                                  fontSize: 14,
+                                                                  fontWeight: FontWeight.w600,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () => Navigator.of(context).pop(),
+                                                        child: Text(
+                                                          "OK",
+                                                          style: TextStyle(
+                                                            color: Color(0xFF1F5EBD),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ).then((_) {
+                                                // Pop the current screen after the dialog is dismissed
+                                                Navigator.of(context).pop();
+                                              });
+                                            },
+                                            child: Text(
+                                              "Yes",
+                                              style: TextStyle(
+                                                color: Color(0xFF1F5EBD),
+                                              ),
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(),
+                                            child: Text(
+                                              "No",
+                                              style: TextStyle(
+                                                color: Color(0xFF1F5EBD),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  } else {
+                                    String message =
+                                        'Please select user access first.';
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          AccountApprovalDialog(
+                                              message: message),
+                                    );
+                                  }
+                                },
+                              ),
                             ),
+                            SizedBox(width: 10),
 
                             // Remove user application from the list of pending approvals.......
-                            IconButton(
-                              icon: Icon(Icons.close),
-                              color: Colors.red,
-                              iconSize: 25,
-                              tooltip: 'Decline',
-                              onPressed: () async {
-                                // Remove user from 'usersPending' collection
-                                await FirebaseFirestore.instance
-                                    .collection('usersPending')
-                                    .doc(userDoc.id)
-                                    .delete();
-                              },
+                            Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.red[700],
+                                  shape: BoxShape.circle),
+                              child: IconButton(
+                                icon: Icon(Icons.close),
+                                color: Colors.white,
+                                iconSize: 15,
+                                tooltip: 'Decline',
+                                onPressed: () async {
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            10.0), // Customize the border radius here
+                                      ),
+                                      contentPadding: EdgeInsets.zero,
+                                      content: SingleChildScrollView(
+                                        child: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxWidth:
+                                            300, // Set the maximum width
+                                            maxHeight:
+                                            150, // Set the maximum height
+                                          ),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize
+                                                .min, // Ensure the column takes only necessary space
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  gradient: LinearGradient(
+                                                    colors: [
+                                                      Color(0xFF00E5E5),
+                                                      Color(0xFF0057FF)
+                                                    ],
+                                                    begin: Alignment.topLeft,
+                                                    end:
+                                                    Alignment.bottomRight,
+                                                  ),
+                                                  borderRadius:
+                                                  BorderRadius.vertical(
+                                                    top:
+                                                    Radius.circular(10.0),
+                                                    bottom: Radius.zero,
+                                                  ),
+                                                ),
+                                                height: 60,
+                                                child: Center(
+                                                  child: Icon(
+                                                      Icons
+                                                          .error_outline_sharp,
+                                                      color: Colors.white,
+                                                      size: 30),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(
+                                                    20.0),
+                                                child: Text(
+                                                  'Reject user?',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontFamily: 'Jost',
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                    FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () async {
+                                            // Add user to 'usersDeclined' collection
+                                            await FirebaseFirestore.instance
+                                                .collection('usersDeclined')
+                                                .doc(userDoc.id)
+                                                .set({
+                                              'username': username,
+                                              'firstName': firstName,
+                                              'lastName': lastName,
+                                              'password': password,
+                                            });
+
+                                            // Remove user from 'usersPending' collection
+                                            await FirebaseFirestore.instance
+                                                .collection('usersPending')
+                                                .doc(userDoc.id)
+                                                .delete();
+
+                                            // Show dialog box after the above operations are completed
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius.circular(10.0), // Customize the border radius here
+                                                  ),
+                                                  contentPadding: EdgeInsets.zero,
+                                                  content: SingleChildScrollView(
+                                                    child: ConstrainedBox(
+                                                      constraints: BoxConstraints(
+                                                        maxWidth: 300, // Set the maximum width
+                                                        maxHeight: 150, // Set the maximum height
+                                                      ),
+                                                      child: Column(
+                                                        mainAxisSize: MainAxisSize
+                                                            .min, // Ensure the column takes only necessary space
+                                                        children: [
+                                                          Container(
+                                                            decoration: BoxDecoration(
+                                                              gradient: LinearGradient(
+                                                                colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
+                                                                begin: Alignment.topLeft,
+                                                                end: Alignment.bottomRight,
+                                                              ),
+                                                              borderRadius: BorderRadius.vertical(
+                                                                top: Radius.circular(10.0),
+                                                                bottom: Radius.zero,
+                                                              ),
+                                                            ),
+                                                            height: 60,
+                                                            child: Center(
+                                                              child: Icon(Icons.check_circle,
+                                                                  color: Colors.white, size: 30),
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.all(20.0),
+                                                            child: Text(
+                                                              'The user has been declined.',
+                                                              style: TextStyle(
+                                                                color: Colors.black,
+                                                                fontFamily: 'Jost',
+                                                                fontSize: 14,
+                                                                fontWeight: FontWeight.w600,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () => Navigator.of(context).pop(),
+                                                      child: Text(
+                                                        "OK",
+                                                        style: TextStyle(
+                                                          color: Color(0xFF1F5EBD),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            ).then((_) {
+                                              // Pop the current screen after the dialog is dismissed
+                                              Navigator.of(context).pop();
+                                            });
+                                          },
+                                          child: Text(
+                                            "Yes",
+                                            style: TextStyle(
+                                              color: Color(0xFF1F5EBD),
+                                            ),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(),
+                                          child: Text(
+                                            "No",
+                                            style: TextStyle(
+                                              color: Color(0xFF1F5EBD),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+
+                                },
+                              ),
                             ),
                           ],
                         ),
@@ -171,6 +536,79 @@ class _AccountApprovalState extends State<AccountApproval> {
           );
         },
       ),
+    );
+  }
+}
+
+class AccountApprovalDialog extends StatelessWidget {
+  final String message;
+
+  const AccountApprovalDialog({Key? key, required this.message})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.circular(10.0), // Customize the border radius here
+      ),
+      contentPadding: EdgeInsets.zero,
+      content: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: 300, // Set the maximum width
+            maxHeight: 150, // Set the maximum height
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize
+                .min, // Ensure the column takes only necessary space
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(10.0),
+                    bottom: Radius.zero,
+                  ),
+                ),
+                height: 60,
+                child: Center(
+                  child: Icon(Icons.error_outline_sharp,
+                      color: Colors.white, size: 30),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  message,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Jost',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(
+            "OK",
+            style: TextStyle(
+              color: Color(0xFF1F5EBD),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

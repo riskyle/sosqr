@@ -101,6 +101,10 @@ class _AccountTabState extends State<AccountTab> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(10.0), // Customize the border radius here
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -167,7 +171,8 @@ class _AccountTabState extends State<AccountTab> {
 
             return Column(
               children: [
-                Container(
+                Expanded(
+                  child: Container(
                   width: double.infinity,
                   padding:
                       EdgeInsets.only(top: 80, bottom: 60, right: 20, left: 20),
@@ -220,7 +225,6 @@ class _AccountTabState extends State<AccountTab> {
                         ),
                       ),
                 ),
-                      SizedBox(height: 20),
                       Container(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -248,6 +252,7 @@ class _AccountTabState extends State<AccountTab> {
                     ],
                   ),
                 ),
+            ),
                 SizedBox(height: 20),
                 Expanded(
                   child: Container(
@@ -257,7 +262,7 @@ class _AccountTabState extends State<AccountTab> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 40, right: 40, bottom: 60, top: 20),
+                                left: 20, right: 20, bottom: 20),
                             child: Container(
                               decoration: BoxDecoration(
                                 boxShadow: [
@@ -332,7 +337,7 @@ class _AccountTabState extends State<AccountTab> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 40, right: 40, bottom: 60),
+                                left: 20, right: 20, bottom: 20),
                             child: widget.accessKey != 'basic'
                                 ? Container(
                               decoration: BoxDecoration(
@@ -410,7 +415,7 @@ class _AccountTabState extends State<AccountTab> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 40, right: 40, bottom: 60),
+                                left: 20, right: 20, bottom: 20),
                             child: widget.accessKey != 'basic'
                                 ? Container(
                                     decoration: BoxDecoration(
@@ -488,7 +493,7 @@ class _AccountTabState extends State<AccountTab> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 40, right: 40, bottom: 60),
+                                left: 20, right: 20, bottom: 20),
                             child: Container(
                               decoration: BoxDecoration(
                                 boxShadow: [
