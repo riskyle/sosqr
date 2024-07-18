@@ -20,6 +20,8 @@ class _CreateAccountState extends State<CreateAccount> {
 
   final _formField = GlobalKey<FormState>();
 
+
+  // Checks if the username already exists in the database
   Future<void> _checkUserExists(String userName) async {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -27,7 +29,7 @@ class _CreateAccountState extends State<CreateAccount> {
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      // User already exists
+      // Dialog box if User already exists
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -94,6 +96,7 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
       );
     } else {
+      // If username is not already in the database, application will be submitted
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -145,6 +148,7 @@ class _CreateAccountState extends State<CreateAccount> {
     }
   }
 
+  // Main Screen of Create Account
   @override
   Widget build(BuildContext context) {
     return Scaffold(

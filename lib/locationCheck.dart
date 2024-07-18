@@ -12,8 +12,14 @@ class LocationScreen extends StatefulWidget {
   final String userDocID;
   final String password;
 
-
-  LocationScreen({required this.firstName, required this.lastName, required this.username, required this.pictureURL, required this.accessKey, required this.userDocID, required this.password});
+  LocationScreen(
+      {required this.firstName,
+      required this.lastName,
+      required this.username,
+      required this.pictureURL,
+      required this.accessKey,
+      required this.userDocID,
+      required this.password});
 
   @override
   _LocationScreenState createState() => _LocationScreenState();
@@ -46,7 +52,7 @@ class _LocationScreenState extends State<LocationScreen> {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius:
-            BorderRadius.circular(45.0), // Customize the border radius here
+                BorderRadius.circular(10.0), // Customize the border radius here
           ),
           contentPadding: EdgeInsets.zero,
           content: SingleChildScrollView(
@@ -67,27 +73,38 @@ class _LocationScreenState extends State<LocationScreen> {
                         end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(45.0),
+                        top: Radius.circular(10.0),
                         bottom: Radius.zero,
                       ),
                     ),
                     height: 60,
                     child: Center(
-                      child: Text('Enable Location Services', style: TextStyle(color: Colors.white, fontFamily: 'Jost', fontWeight: FontWeight.normal, fontSize: 22),),
+                      child: Text(
+                        'Enable Location Services',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Jost',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 22),
+                      ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Center(
-                      child: Text(
-                      'Please enable location services to continue!',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'Jost',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Please enable location services to continue!',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Jost',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
+                        ],
                       ),
-                    ),),
                   ),
                 ],
               ),
@@ -137,14 +154,17 @@ class _LocationScreenState extends State<LocationScreen> {
     }
   }
 
-  double _calculateDistance(double startLat, double startLng, double endLat, double endLng) {
+  double _calculateDistance(
+      double startLat, double startLng, double endLat, double endLng) {
     const double earthRadiusKm = 6371.0;
     double dLat = _degreesToRadians(endLat - startLat);
     double dLng = _degreesToRadians(endLng - startLng);
 
     double a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(_degreesToRadians(startLat)) * cos(_degreesToRadians(endLat)) *
-            sin(dLng / 2) * sin(dLng / 2);
+        cos(_degreesToRadians(startLat)) *
+            cos(_degreesToRadians(endLat)) *
+            sin(dLng / 2) *
+            sin(dLng / 2);
 
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
@@ -158,8 +178,15 @@ class _LocationScreenState extends State<LocationScreen> {
   void _redirectToAnotherScreen() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SecondScreen(username: widget.username, lastName: widget.lastName, firstName: widget.firstName, pictureURL: widget.pictureURL, accessKey: widget.accessKey, userDocID: widget.userDocID, password: widget.password
-      )),
+      MaterialPageRoute(
+          builder: (context) => SecondScreen(
+              username: widget.username,
+              lastName: widget.lastName,
+              firstName: widget.firstName,
+              pictureURL: widget.pictureURL,
+              accessKey: widget.accessKey,
+              userDocID: widget.userDocID,
+              password: widget.password)),
     );
   }
 
@@ -168,14 +195,77 @@ class _LocationScreenState extends State<LocationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error'),
-          content: Text('User not in the building. App access denied.'),
-          actions: <Widget>[
+          shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(10.0), // Customize the border radius here
+          ),
+          contentPadding: EdgeInsets.zero,
+          content: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: 300, // Set the maximum width
+                maxHeight: 150, // Set the maximum height
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize
+                    .min, // Ensure the column takes only necessary space
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(10.0),
+                        bottom: Radius.zero,
+                      ),
+                    ),
+                    height: 60,
+                    child: Center(
+                      child: Text(
+                        'Error',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Jost',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 22),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'User not in the building. App access denied.',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Jost',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
             TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                "OK",
+                style: TextStyle(
+                  color: Color(0xFF1F5EBD),
+                ),
+              ),
             ),
           ],
         );
@@ -187,27 +277,26 @@ class _LocationScreenState extends State<LocationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Location Check...'),
+        title: Text('Location Check...', style: TextStyle(fontFamily: 'Jost', fontWeight: FontWeight.bold, fontSize: 20),),
       ),
       body: Center(
         child: _currentPosition != null
             ? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Latitude: ${_currentPosition!.latitude}',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Longitude: ${_currentPosition!.longitude}',
-              style: TextStyle(fontSize: 24),
-            ),
-          ],
-        )
-            : CircularProgressIndicator(),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Latitude: ${_currentPosition!.latitude}',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Longitude: ${_currentPosition!.longitude}',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                ],
+              )
+            : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0057FF))),
       ),
     );
   }
 }
-
