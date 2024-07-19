@@ -134,6 +134,8 @@ class _SecondScreenState extends State<SecondScreen> {
     }
   }
 
+  //Upload the user's Name + scanned QR code's note and save it as a new variable 'logText' ands save it in the Firestore database
+  // in the allLogs collection alongside userDocID, username, and timestamp
   Future<void> _uploadNoteToFirestore(String qrCode, String qrNote) async {
     try {
       final logMessage = '${widget.firstName}$qrNote';
@@ -176,6 +178,7 @@ class _SecondScreenState extends State<SecondScreen> {
     }
   }
 
+  // Main Screen for the QR Scanner Tab
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

@@ -45,6 +45,7 @@ class _AccountTabState extends State<AccountTab> {
         .get();
   }
 
+  // For bottom nav bar
   void _onItemTapped(int index) {
     setState(() {
       if (_selectedIndex != index) {
@@ -140,6 +141,7 @@ class _AccountTabState extends State<AccountTab> {
     );
   }
 
+  // Main Screen sa account tab
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -149,6 +151,8 @@ class _AccountTabState extends State<AccountTab> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
+
+        // FutureBuilder para muchange dayon and profile pic display once giupdate
         body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
           future: getUserFuture(),
           builder: (context, snapshot) {

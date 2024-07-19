@@ -44,6 +44,8 @@ class _LocationScreenState extends State<LocationScreen> {
     _getCurrentLocation();
   }
 
+  // Shows the dialog box 'Enable Location Services' when location is turned off
+  // Won't disappear unless location is turned on
   Future<void> _showEnableLocationDialog() async {
     await showDialog(
       context: context,
@@ -126,6 +128,7 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 
+  // Gets user's location to be compared its proximity to MDCT Building
   void _getCurrentLocation() async {
     try {
       _currentPosition = await Geolocator.getCurrentPosition(
@@ -175,6 +178,7 @@ class _LocationScreenState extends State<LocationScreen> {
     return degrees * pi / 180;
   }
 
+  // Redirects the user to the Qr Scanner tab
   void _redirectToAnotherScreen() {
     Navigator.push(
       context,
@@ -189,7 +193,7 @@ class _LocationScreenState extends State<LocationScreen> {
               password: widget.password)),
     );
   }
-
+  // Dialog box for when the user is not within MDCT Building
   void _showErrorMessage() {
     showDialog(
       context: context,
@@ -272,6 +276,7 @@ class _LocationScreenState extends State<LocationScreen> {
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'locationCheck.dart';
 import 'createAccount.dart';
 
-
 class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -87,9 +86,6 @@ class _MainScreenState extends State<MainScreen> {
         final userDocID = userDoc['userDocID'];
         final password = userDoc['password'];
 
-
-
-
         //Save the timestamps of log in and out of the user in the database
         await FirebaseFirestore.instance
             .collection('logInandOut')
@@ -112,7 +108,6 @@ class _MainScreenState extends State<MainScreen> {
         prefs.setString('userDocID', userDocID);
         prefs.setString('password', password);
 
-
         // Login successful
         Navigator.pushReplacement(
           context,
@@ -128,7 +123,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
         );
-      } else{
+      } else {
         // Check if the user is pending for approval
         final pendingQuerySnapshot = await FirebaseFirestore.instance
             .collection('usersPending')
@@ -149,7 +144,6 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-
   // Dialog box if invalid or pending for approval ang account
   void _showErrorDialog(String message) {
     showDialog(
@@ -157,7 +151,7 @@ class _MainScreenState extends State<MainScreen> {
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius:
-          BorderRadius.circular(10.0), // Customize the border radius here
+              BorderRadius.circular(10.0), // Customize the border radius here
         ),
         contentPadding: EdgeInsets.zero,
         content: SingleChildScrollView(
@@ -219,310 +213,300 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-
   // LOGIN SCREEN
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Container(
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                        child: Image.asset('assets/SOS-logo.png'),
-                      ),
-                    ),
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    child: Image.asset('assets/SOS-logo.png'),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Welcome Back',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily:
+              ),
+              Container(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Welcome Back',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily:
                               'Jost', // Check if 'Jost' is correctly defined
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            'Sign in to continue',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily:
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        'Sign in to continue',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily:
                                 'Jost', // Check if 'Jost' is correctly defined
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 40.0, right: 40.0, bottom: 30),
+                        child: Container(
+                          height: 60.0, // Set the desired height here
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Background color
+                            borderRadius:
+                                BorderRadius.circular(10.0), // Rounded corners
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black
+                                    .withOpacity(0.1), // Shadow color
+                                spreadRadius: 5, // Spread radius
+                                blurRadius: 7, // Blur radius
+                                offset: Offset(
+                                    0, 3), // Offset in the x and y directions
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 40.0, right: 40.0, bottom: 30),
-                            child: Container(
-                              height: 60.0, // Set the desired height here
-                              decoration: BoxDecoration(
-                                color: Colors.white, // Background color
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Rounded corners
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black
-                                        .withOpacity(0.1), // Shadow color
-                                    spreadRadius: 5, // Spread radius
-                                    blurRadius: 7, // Blur radius
-                                    offset: Offset(0,
-                                        3), // Offset in the x and y directions
-                                  ),
-                                ],
-                              ),
-                              child: TextFormField(
-                                onChanged: (value) {
-                                  setState(() {});
-                                },
-                                controller: _usernameController,
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.account_circle,
-                                      color: Color(0xFF0057FF)),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 20.0,
-                                      horizontal:
+                          child: TextFormField(
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            controller: _usernameController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.account_circle,
+                                  color: Color(0xFF0057FF)),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 20.0,
+                                  horizontal:
                                       20.0), // Adjust padding to modify text field content position
-                                  hintText: 'Enter username',
-                                  hintStyle: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey[300],
-                                    fontFamily: 'Jost',
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                    BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                    BorderSide(color: Colors.blue[500]!),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                ),
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontFamily: 'Jost',
-                                  color: Color(0xFF1F5EBD),
-                                ),
+                              hintText: 'Enter username',
+                              hintStyle: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey[300],
+                                fontFamily: 'Jost',
                               ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.blue[500]!),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: 'Jost',
+                              color: Color(0xFF1F5EBD),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 40, right: 40, bottom: 30),
-                            child: Container(
-                              height: 60.0, // Set the desired height here
-                              decoration: BoxDecoration(
-                                color: Colors.white, // Background color
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Rounded corners
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black
-                                        .withOpacity(0.1), // Shadow color
-                                    spreadRadius: 5, // Spread radius
-                                    blurRadius: 7, // Blur radius
-                                    offset: Offset(0,
-                                        3), // Offset in the x and y directions
-                                  ),
-                                ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 40, right: 40, bottom: 30),
+                        child: Container(
+                          height: 60.0, // Set the desired height here
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Background color
+                            borderRadius:
+                                BorderRadius.circular(10.0), // Rounded corners
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black
+                                    .withOpacity(0.1), // Shadow color
+                                spreadRadius: 5, // Spread radius
+                                blurRadius: 7, // Blur radius
+                                offset: Offset(
+                                    0, 3), // Offset in the x and y directions
                               ),
-                              child: TextFormField(
-                                onChanged: (value) {
-                                  setState(() {});
-                                },
-                                controller: _passwordController,
-                                obscureText: _obscureTextPassword,
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.lock,
-                                      color: Color(0xFF0057FF)),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _obscureTextPassword
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                      color: Colors.grey,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _obscureTextPassword =
+                            ],
+                          ),
+                          child: TextFormField(
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            controller: _passwordController,
+                            obscureText: _obscureTextPassword,
+                            decoration: InputDecoration(
+                              prefixIcon:
+                                  Icon(Icons.lock, color: Color(0xFF0057FF)),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscureTextPassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _obscureTextPassword =
                                         !_obscureTextPassword;
-                                      });
-                                    },
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 20.0,
-                                      horizontal:
-                                      20.0), // Adjust padding to modify text field content position
-                                  hintText: 'Enter password',
-                                  hintStyle: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey[300],
-                                    fontFamily: 'Jost',
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                    BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                    BorderSide(color: Colors.blue[500]!),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                ),
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontFamily: 'Jost',
-                                  color: Color(0xFF1F5EBD),
-                                ),
+                                  });
+                                },
                               ),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 20.0,
+                                  horizontal:
+                                      20.0), // Adjust padding to modify text field content position
+                              hintText: 'Enter password',
+                              hintStyle: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey[300],
+                                fontFamily: 'Jost',
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.blue[500]!),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: 'Jost',
+                              color: Color(0xFF1F5EBD),
                             ),
                           ),
-                          Center(
-                            child: _isLoading
-                                ? Padding(
-                              padding: const EdgeInsets.only(bottom: 60),
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color(0xFF00E5E5)),
-                              ),
-                            )
-                                : Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 40, right: 40, bottom: 60),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color:
-                                      Colors.black.withOpacity(0.1),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 3),
-                                    ),
-                                  ],
-                                  borderRadius:
-                                  BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      Center(
+                        child: _isLoading
+                            ? Padding(
+                                padding: const EdgeInsets.only(bottom: 60),
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Color(0xFF00E5E5)),
                                 ),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    String username =
-                                        _usernameController.text;
-                                    String password =
-                                        _passwordController.text;
-                                    if (username.isEmpty ||
-                                        password.isEmpty) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Row(
-                                            children: [
-                                              Icon(
-                                                  Icons
-                                                      .error_outline_rounded,
-                                                  color: Colors.red),
-                                              SizedBox(width: 10),
-                                              Text(
-                                                  'Username or password cannot be empty.'),
-                                            ],
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 40, right: 40, bottom: 60),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        spreadRadius: 5,
+                                        blurRadius: 7,
+                                        offset: Offset(0, 3),
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      String username =
+                                          _usernameController.text;
+                                      String password =
+                                          _passwordController.text;
+                                      if (username.isEmpty ||
+                                          password.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Row(
+                                              children: [
+                                                Icon(
+                                                    Icons.error_outline_rounded,
+                                                    color: Colors.red),
+                                                SizedBox(width: 10),
+                                                Text(
+                                                    'Username or password cannot be empty.'),
+                                              ],
+                                            ),
+                                            duration: Duration(seconds: 2),
                                           ),
-                                          duration: Duration(seconds: 2),
+                                        );
+                                      } else {
+                                        _login(username, password);
+                                      }
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          if (states.contains(
+                                              MaterialState.pressed)) {
+                                            return Colors.grey[200]!;
+                                          }
+                                          return Colors.blue[300]!;
+                                        },
+                                      ),
+                                      minimumSize:
+                                          MaterialStateProperty.all<Size>(
+                                              Size(double.infinity, 60)),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
                                         ),
-                                      );
-                                    } else {
-                                      _login(username, password);
-                                    }
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                        if (states.contains(
-                                            MaterialState.pressed)) {
-                                          return Colors.grey[200]!;
-                                        }
-                                        return Colors.blue[300]!;
-                                      },
+                                      ),
                                     ),
-                                    minimumSize:
-                                    MaterialStateProperty.all<Size>(
-                                        Size(double.infinity, 60)),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10.0),
+                                    child: Text(
+                                      'LOGIN',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Jost',
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ),
-                                  child: Text(
-                                    'LOGIN',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Jost',
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => CreateAccount()),
-                              );
-                            },
-                            child: Text(
-                              'Create Account',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Jost',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          )
-
-                        ],
                       ),
-                    ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CreateAccount()),
+                          );
+                        },
+                        child: Text(
+                          'Create Account',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Jost',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
