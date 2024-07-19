@@ -394,7 +394,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             );
                           } else if (checkNew.length < 8) {
                             String message =
-                                "The new password must be at least be 8 characters.";
+                                "The new password must be at least 8 characters.";
                             showDialog(
                               context: context,
                               builder: (context) =>
