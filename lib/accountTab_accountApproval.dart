@@ -9,6 +9,24 @@ class AccountApproval extends StatefulWidget {
 class _AccountApprovalState extends State<AccountApproval> {
   String pictureURL = 'https://clipart-library.com/images/ATbrxjpyc.jpg';
   Map<String, String?> _selectedAccessMap = {};
+  Set<String> _selectedUsers = Set();
+  bool _selectAll = false;
+
+  void _toggleSelectAll(bool? value){
+    setState(() {
+      _selectAll = value!;
+      _selectedUsers.clear();
+      if (_selectAll){
+        FirebaseFirestore.instance.collection('userPending').get().then((querySnapshot){
+          for (var userDoc in querySnapshot.docs){
+            var userData = userDoc.data() as Map<String, dynamic>;
+            _selectedUsers.add(userData['username']);
+          }
+        });
+      }
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +44,17 @@ class _AccountApprovalState extends State<AccountApproval> {
           color: Colors.white,
         ),
         centerTitle: true,
+        actions: [
+          Checkbox(value: _selectAll,
+              onChanged: _toggleSelectAll,
+          activeColor: Colors.white,
+          checkColor: Colors.blue,
+          ),
+        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream:
-            FirebaseFirestore.instance.collection('usersPending').snapshots(),
+        FirebaseFirestore.instance.collection('usersPending').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
@@ -105,7 +130,7 @@ class _AccountApprovalState extends State<AccountApproval> {
                                 }).toList(),
                                 onChanged: (String? newValue) {
                                   setState(
-                                    () {
+                                        () {
                                       _selectedAccessMap[username] = newValue;
                                     },
                                   );
@@ -131,7 +156,7 @@ class _AccountApprovalState extends State<AccountApproval> {
                                 tooltip: 'Accept',
                                 onPressed: () async {
                                   String? accessKey =
-                                      _selectedAccessMap[username];
+                                  _selectedAccessMap[username];
                                   if (accessKey != null) {
 
                                     showDialog(
@@ -146,9 +171,9 @@ class _AccountApprovalState extends State<AccountApproval> {
                                           child: ConstrainedBox(
                                             constraints: BoxConstraints(
                                               maxWidth:
-                                                  300, // Set the maximum width
+                                              300, // Set the maximum width
                                               maxHeight:
-                                                  150, // Set the maximum height
+                                              150, // Set the maximum height
                                             ),
                                             child: Column(
                                               mainAxisSize: MainAxisSize
@@ -163,12 +188,12 @@ class _AccountApprovalState extends State<AccountApproval> {
                                                       ],
                                                       begin: Alignment.topLeft,
                                                       end:
-                                                          Alignment.bottomRight,
+                                                      Alignment.bottomRight,
                                                     ),
                                                     borderRadius:
-                                                        BorderRadius.vertical(
+                                                    BorderRadius.vertical(
                                                       top:
-                                                          Radius.circular(10.0),
+                                                      Radius.circular(10.0),
                                                       bottom: Radius.zero,
                                                     ),
                                                   ),
@@ -191,7 +216,7 @@ class _AccountApprovalState extends State<AccountApproval> {
                                                       fontFamily: 'Jost',
                                                       fontSize: 14,
                                                       fontWeight:
-                                                          FontWeight.w600,
+                                                      FontWeight.w600,
                                                     ),
                                                   ),
                                                 ),
@@ -551,7 +576,7 @@ class AccountApprovalDialog extends StatelessWidget {
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius:
-            BorderRadius.circular(10.0), // Customize the border radius here
+        BorderRadius.circular(10.0), // Customize the border radius here
       ),
       contentPadding: EdgeInsets.zero,
       content: SingleChildScrollView(

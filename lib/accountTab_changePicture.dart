@@ -2,18 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
 
 class ChangePicture extends StatefulWidget {
-  final String firstName;
-  final String lastName;
-  final String username;
-  final String pictureURL;
-  final String accessKey;
-  final String userDocID;
+  final String firstName, lastName, username, pictureURL, accessKey, userDocID;
 
-  ChangePicture(
+  const ChangePicture(
       {required this.firstName,
         required this.lastName,
         required this.username,
@@ -238,11 +232,11 @@ class _ChangePictureState extends State<ChangePicture> {
                                       });
                                     },
                                     style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty
+                                      backgroundColor: WidgetStateProperty
                                           .resolveWith<Color>(
-                                            (Set<MaterialState> states) {
+                                            (Set<WidgetState> states) {
                                           if (states
-                                              .contains(MaterialState.pressed)) {
+                                              .contains(WidgetState.pressed)) {
                                             // return light blue when pressed
                                             return Colors.blue[200]!;
                                           }
@@ -251,9 +245,9 @@ class _ChangePictureState extends State<ChangePicture> {
                                         },
                                       ),
                                       minimumSize:
-                                      MaterialStateProperty.all<Size>(
+                                      WidgetStateProperty.all<Size>(
                                           Size(200, 50)),
-                                      shape: MaterialStateProperty.all<
+                                      shape: WidgetStateProperty.all<
                                           RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
@@ -295,11 +289,11 @@ class _ChangePictureState extends State<ChangePicture> {
                                       });
                                     },
                                     style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty
+                                      backgroundColor: WidgetStateProperty
                                           .resolveWith<Color>(
-                                            (Set<MaterialState> states) {
+                                            (Set<WidgetState> states) {
                                           if (states
-                                              .contains(MaterialState.pressed)) {
+                                              .contains(WidgetState.pressed)) {
                                             // return light blue when pressed
                                             return Colors.blue[200]!;
                                           }
@@ -308,9 +302,9 @@ class _ChangePictureState extends State<ChangePicture> {
                                         },
                                       ),
                                       minimumSize:
-                                      MaterialStateProperty.all<Size>(
+                                      WidgetStateProperty.all<Size>(
                                           Size(200, 50)),
-                                      shape: MaterialStateProperty.all<
+                                      shape: WidgetStateProperty.all<
                                           RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
@@ -372,19 +366,19 @@ class _ChangePictureState extends State<ChangePicture> {
                     }
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
+                    backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                          (Set<WidgetState> states) {
 
                         if (_image == null) {
                           return Colors.grey;
-                        } else if (states.contains(MaterialState.pressed)) {
+                        } else if (states.contains(WidgetState.pressed)) {
                           return Colors.blue[200]!;
                         }
                         return Color(0xFF1F5EBD);
                       },
                     ),
-                    minimumSize: MaterialStateProperty.all<Size>(Size(200, 60)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    minimumSize: WidgetStateProperty.all<Size>(Size(200, 60)),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),

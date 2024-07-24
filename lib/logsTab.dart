@@ -4,15 +4,9 @@ import 'second_screen.dart';
 import 'accountTab.dart';
 
 class LogsTab extends StatefulWidget {
-  final String username;
-  final String lastName;
-  final String firstName;
-  final String pictureURL;
-  final String accessKey;
-  final String userDocID;
-  final String password;
+  final String username ,lastName, firstName, pictureURL, accessKey, userDocID, password;
 
-  LogsTab(
+ const LogsTab(
       {required this.username,
       required this.lastName,
       required this.firstName,
