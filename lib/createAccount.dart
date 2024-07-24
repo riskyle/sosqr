@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'firebase_options.dart';
+
 
 class CreateAccount extends StatefulWidget {
   @override
@@ -17,6 +16,8 @@ class _CreateAccountState extends State<CreateAccount> {
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
+
 
   final _formField = GlobalKey<FormState>();
 
@@ -148,6 +149,10 @@ class _CreateAccountState extends State<CreateAccount> {
     }
   }
 
+void clearText(){
+  _textEditingController.clear();
+}
+
   // Main Screen of Create Account
   @override
   Widget build(BuildContext context) {
@@ -163,9 +168,10 @@ class _CreateAccountState extends State<CreateAccount> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            colors: [Color(0xFF5044f8), Color(0xFF12163b)],
+            end: Alignment(-1.0, 1.0),
+            begin: Alignment(0.1, -1.0),
+            stops: [0.29, 0.98],
           ),
         ),
         child: Center(
@@ -462,13 +468,12 @@ class _CreateAccountState extends State<CreateAccount> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Enter password";
-                        } else {
-                          bool isValidPassword =
-                              RegExp(r'^(?=.*[a-zA-Z\d])[a-zA-Z\d]{8,12}$')
-                                  .hasMatch(value);
-                          if (!isValidPassword) {
-                            return "Password should contain 8 - 12 characters.";
-                          }
+                        } else if (value.length < 8){
+                          return 'Password must be at least 8 characters';
+                        } else if (!value.contains(RegExp(r'[A-Z]'))){
+                          return 'Password must contain at least one uppercase letter';
+                        } else if (!value.contains(RegExp(r'[0-9]'))){
+                          return 'Password must contain at least one number';
                         }
                         return null;
                       },
@@ -631,21 +636,26 @@ class _CreateAccountState extends State<CreateAccount> {
                           if (_formField.currentState?.validate() ?? false) {
                             _checkUserExists(_userNameController.text);
                           }
+                            firstName.clear();
+                            lastName.clear();
+                            _userNameController.clear();
+                            _passwordController.clear();
+                            _confirmPasswordController.clear();
                         },
                         style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.pressed)) {
+                              WidgetStateProperty.resolveWith<Color>(
+                            (Set<WidgetState> states) {
+                              if (states.contains(WidgetState.pressed)) {
                                 return Colors.blue[200]!;
                               }
-                              return Color(0xFF1F5EBD);
+                              return Colors.indigo;
                             },
                           ),
-                          minimumSize: MaterialStateProperty.all<Size>(
+                          minimumSize: WidgetStateProperty.all<Size>(
                               Size(double.infinity, 60)),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),

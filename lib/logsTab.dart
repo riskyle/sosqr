@@ -4,15 +4,9 @@ import 'second_screen.dart';
 import 'accountTab.dart';
 
 class LogsTab extends StatefulWidget {
-  final String username;
-  final String lastName;
-  final String firstName;
-  final String pictureURL;
-  final String accessKey;
-  final String userDocID;
-  final String password;
+  final String username ,lastName, firstName, pictureURL, accessKey, userDocID, password;
 
-  LogsTab(
+ const LogsTab(
       {required this.username,
       required this.lastName,
       required this.firstName,
@@ -29,7 +23,6 @@ class _LogsTabState extends State<LogsTab> {
   int _selectedIndex = 1;
 
 
-  // For bottom navigation bar
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -80,7 +73,6 @@ class _LogsTabState extends State<LogsTab> {
           backgroundColor: Color(0xFF0057FF),
           automaticallyImplyLeading: false,
         ),
-        // StreamBuilder to fetch logs in collection 'allLogs'
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('allLogs')
@@ -97,7 +89,7 @@ class _LogsTabState extends State<LogsTab> {
               return Center(
                   child: Text('No logs found for ${widget.firstName}'));
             }
-            // ListView.builder to generate a list from all the logs
+
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
@@ -106,7 +98,6 @@ class _LogsTabState extends State<LogsTab> {
                 var timestamp = log['timestamp']?.toDate().toString() ??
                     'No timestamp available';
 
-                // Single rectangular box sa logs, mudaghan tungod sa listview builder
                 return Column(
                   children: [
                     Container(
