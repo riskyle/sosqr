@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:math';
-import 'second_screen.dart';
+import 'package:untitled1/screens/other/second_screen.dart';
 
 class LocationScreen extends StatefulWidget {
   final String firstName;
@@ -11,6 +11,9 @@ class LocationScreen extends StatefulWidget {
   final String accessKey;
   final String userDocID;
   final String password;
+  final String department;
+  final String role;
+
 
   LocationScreen(
       {required this.firstName,
@@ -19,7 +22,10 @@ class LocationScreen extends StatefulWidget {
       required this.pictureURL,
       required this.accessKey,
       required this.userDocID,
-      required this.password});
+      required this.password,
+      required this.department,
+        required this.role,
+      });
 
   @override
   _LocationScreenState createState() => _LocationScreenState();
@@ -186,7 +192,10 @@ class _LocationScreenState extends State<LocationScreen> {
               pictureURL: widget.pictureURL,
               accessKey: widget.accessKey,
               userDocID: widget.userDocID,
-              password: widget.password)),
+              password: widget.password,
+              department: widget.department,
+              role: widget.role,
+          )),
     );
   }
 

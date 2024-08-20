@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class ChangePicture extends StatefulWidget {
-  final String firstName, lastName, username, pictureURL, accessKey, userDocID;
+  final String firstName, lastName, username, pictureURL, accessKey, userDocID, department, role;
 
   const ChangePicture(
       {required this.firstName,
@@ -13,7 +13,10 @@ class ChangePicture extends StatefulWidget {
         required this.username,
         required this.pictureURL,
         required this.accessKey,
-        required this.userDocID});
+        required this.userDocID,
+        required this.department,
+        required this.role,
+      });
 
   @override
   _ChangePictureState createState() => _ChangePictureState();

@@ -1,5 +1,16 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
+import 'accountTab_editProfile.dart';
+import 'package:intl/intl.dart';
+
+
 
 class AllAccounts extends StatefulWidget {
   @override
@@ -7,9 +18,11 @@ class AllAccounts extends StatefulWidget {
 }
 
 class _AllAccountsState extends State<AllAccounts> {
+  DateTimeRange? _selectedDateRange; // Add this to hold the selected date range
   bool _isSearching = false;
   TextEditingController _searchController = TextEditingController();
   String _searchText = "";
+
 
   @override
   void initState() {
@@ -107,6 +120,8 @@ class _AllAccountsState extends State<AllAccounts> {
               String accessKey = userData['accessKey'] ?? 'No access key';
               String password = userData['password'] ?? 'No password';
               String userDocID = userData['userDocID'] ?? 'No userDocID';
+              String department = userData['department'] ?? '';
+              String role = userData['role'] ?? '';
 
               return Column(
                 children: [
@@ -206,6 +221,8 @@ class _AllAccountsState extends State<AllAccounts> {
                             username: username,
                             password: password,
                             userDocID: userDocID,
+                            department: department,
+                            role: role,
                           ),
                         ),
                       );
@@ -238,44 +255,245 @@ class _AllAccountsState extends State<AllAccounts> {
   }
 }
 
-class AllLogs extends StatelessWidget {
-  final String firstName;
-  final String lastName;
+class AllLogs extends StatefulWidget {
   final String username;
+  final String lastName;
+  final String firstName;
   final String userDocID;
 
   AllLogs({
-    required this.firstName,
-    required this.lastName,
     required this.username,
+    required this.lastName,
+    required this.firstName,
     required this.userDocID,
   });
 
   @override
-  Widget build(BuildContext context) {
-    // Your AllLogs widget implementation here
-    return Container();
-  }
+  _AllLogsState createState() => _AllLogsState();
 }
 
-class EditProfile extends StatelessWidget {
-  final String firstName;
-  final String lastName;
-  final String username;
-  final String password;
-  final String userDocID;
+class _AllLogsState extends State<AllLogs> {
+  DateTimeRange? _selectedDateRange;
 
-  EditProfile({
-    required this.firstName,
-    required this.lastName,
-    required this.username,
-    required this.password,
-    required this.userDocID,
-  });
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> _selectDateRange() async {
+    DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _selectedDateRange) {
+      setState(() {
+        _selectedDateRange = picked;
+      });
+    }
+  }
+
+  Future<void> _exportLogsToPDF() async {
+    if (_selectedDateRange == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select a date range first')),
+      );
+      return;
+    }
+
+    try {
+      final Directory? appDocDir = await getExternalStorageDirectory();
+      if (appDocDir != null) {
+        final String appDocPath = appDocDir.path;
+        final File tempFile = File('$appDocPath/logs_${DateTime.now().toIso8601String()}.pdf');
+
+        // Load the logo image from assets
+        final ByteData logoData = await rootBundle.load('assets/SOS-logo.png');
+        final Uint8List logoBytes = logoData.buffer.asUint8List();
+        final pw.ImageProvider logo = pw.MemoryImage(logoBytes);
+
+        // Fetch logs from Firestore
+        QuerySnapshot logsSnapshot = await FirebaseFirestore.instance
+            .collection('allLogs')
+            .where('userDocID', isEqualTo: widget.userDocID)
+            .get();
+
+        final pdf = pw.Document();
+        final logEntries = logsSnapshot.docs.map((doc) {
+          String logText = doc['logText'] ?? 'No log text available';
+          String timestamp = (doc['timestamp'] as Timestamp).toDate().toString();
+          return {
+            'logText': logText,
+            'timestamp': timestamp,
+          };
+        }).toList();
+
+        pdf.addPage(
+          pw.Page(
+            build: (pw.Context context) {
+              return pw.Column(
+                children: [
+                  pw.Image(logo, width: 300, height: 300), //Logo image
+                  // Header with user's first and last name
+                  pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                    children:[
+                      pw.Text(
+                      '${widget.firstName} ${widget.lastName} - Logs',
+                      style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  pw.SizedBox(height: 20), // Space between header and logs
+                  // Log entries
+                  ...logEntries.map((entry) {
+                    return pw.Container(
+                      margin: const pw.EdgeInsets.symmetric(vertical: 4.0),
+                      child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text(
+                            entry['logText'] ?? 'No log text available',
+                            style: pw.TextStyle(fontSize: 18, color: PdfColors.black),
+                          ),
+                          pw.Text(
+                            entry['timestamp'] ?? 'No timestamp available',
+                            style: pw.TextStyle(fontSize: 14, color: PdfColors.grey),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ],
+              );
+            },
+          ),
+        );
+
+        // Save PDF locally
+        await tempFile.writeAsBytes(await pdf.save());
+
+        // Open the file
+        await OpenFile.open(tempFile.path);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('File downloaded and opened successfully'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not access external storage'),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to export logs: $e'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Your EditProfile widget implementation here
-    return Container();
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Color(0xFF0057FF),
+        automaticallyImplyLeading: false,
+        title: TextButton(
+          onPressed: _selectDateRange,
+          child: Text(
+            _selectedDateRange == null
+                ? 'Select Date Range'
+                : '${DateFormat('MM/dd/yyyy').format(_selectedDateRange!.start)} - ${DateFormat('MM/dd/yyyy').format(_selectedDateRange!.end)}',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+      body: _selectedDateRange == null
+          ? Center(
+        child: Text(
+          'Please select a date range to view logs',
+          style: TextStyle(fontSize: 18, color: Colors.black),
+        ),
+      )
+          : StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('allLogs')
+            .where('username', isEqualTo: widget.username)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('No logs found for ${widget.firstName}'));
+          }
+
+          var filteredDocs = snapshot.data!.docs.where((doc) {
+            var timestamp = (doc['timestamp'] as Timestamp).toDate();
+            return timestamp.isAfter(_selectedDateRange!.start) &&
+                timestamp.isBefore(_selectedDateRange!.end.add(Duration(days: 1)));
+          }).toList();
+
+          if (filteredDocs.isEmpty) {
+            return Center(child: Text('No logs found for the selected date range.'));
+          }
+
+          return ListView.builder(
+            itemCount: filteredDocs.length,
+            itemBuilder: (context, index) {
+              var log = filteredDocs[index];
+              var logText = log['logText'] ?? 'No log text available';
+              var timestamp = log['timestamp']?.toDate().toString() ?? 'No timestamp available';
+
+              return Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20.0),
+                        bottom: Radius.circular(20.0),
+                      ),
+                      color: Colors.white,
+                    ),
+                    child: ListTile(
+                      title: Center(
+                        child: Text(
+                          logText,
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                        ),
+                      ),
+                      subtitle: Center(
+                        child: Text(
+                          timestamp,
+                          style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider()
+                ],
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await _exportLogsToPDF();
+        },
+        child: Icon(Icons.download),
+        backgroundColor: Color(0xFF0057FF),
+      ),
+    );
   }
 }
+
+

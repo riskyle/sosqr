@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ChangePassword extends StatefulWidget {
-  final String firstName, lastName, username, pictureURL, accessKey, password, userDocID;
+  final String firstName, lastName, username, pictureURL, accessKey, password, userDocID, department, role;
 
   ChangePassword({
     required this.firstName,
@@ -13,6 +13,8 @@ class ChangePassword extends StatefulWidget {
     required this.accessKey,
     required this.password,
     required this.userDocID,
+    required this.department,
+    required this.role,
   });
 
   @override
@@ -24,10 +26,29 @@ class _ChangePasswordState extends State<ChangePassword> {
   bool _obscureTextNew = true;
   bool _obscureTextConfirm = true;
   bool showStreamBuilder = false;
+
+
   TextEditingController _currentPassword = TextEditingController();
   TextEditingController _newPassword = TextEditingController();
   TextEditingController _confirmPassword = TextEditingController();
   late String streamPassword = '';
+
+  @override
+  void initState() {
+    super.initState();
+    //Fetch user data and set streamPassword
+    FirebaseFirestore.instance
+    .collection('users')
+    .doc(widget.userDocID)
+    .get()
+    .then((DocumentSnapshot documentSnapshot){
+      if (documentSnapshot.exists){
+        setState(() {
+          streamPassword = documentSnapshot['password'];
+        });
+      }
+    });
+  }
 
 
   Future<void> updatePassword() async {
@@ -37,9 +58,11 @@ class _ChangePasswordState extends State<ChangePassword> {
 
     if (checkCurrent.isEmpty || checkNew.isEmpty || checkConfirm.isEmpty) {
       showMessageDialog('Please fill out all necessary fields.');
+
       return;
     } else if (checkCurrent != streamPassword) {
       showMessageDialog("The entered password doesn't match with current password.");
+
       return;
     } else if (checkNew != checkConfirm) {
       showMessageDialog("The new password and confirm password do not match.");
@@ -391,7 +414,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: ElevatedButton(
-                          onPressed: updatePassword,
+                          onPressed:  updatePassword,
                           style: ButtonStyle(
                             backgroundColor:
                             WidgetStateProperty.resolveWith<Color>(
@@ -405,8 +428,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 if (checkCurrent.isEmpty ||
                                     checkNew.isEmpty ||
                                     checkConfirm.isEmpty) {
+
                                   return Colors.grey;
                                 } else if (states.contains(WidgetState.pressed)) {
+
                                   return Colors.blue[200]!;
                                 }
                                 return Color(0xFF1F5EBD);

@@ -15,6 +15,8 @@ class _CreateAccountState extends State<CreateAccount> {
   TextEditingController _confirmPasswordController = TextEditingController();
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
+  TextEditingController department  = TextEditingController();
+  TextEditingController role  = TextEditingController();
   TextEditingController _userNameController = TextEditingController();
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -24,132 +26,186 @@ class _CreateAccountState extends State<CreateAccount> {
 
   // Checks if the username already exists in the database
   Future<void> _checkUserExists(String userName) async {
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .where('username', isEqualTo: userName)
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      // Dialog box if User already exists
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
+    // Show the loading dialog immediately
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(10.0), // Customize the border radius here
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          contentPadding: EdgeInsets.zero,
-          content: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: 300, // Set the maximum width
-                maxHeight: 150, // Set the maximum height
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 10),
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0057FF)),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize
-                    .min, // Ensure the column takes only necessary space
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+              SizedBox(height: 10),
+              Text(
+                'Checking username availability...',
+                style: TextStyle(
+                    fontFamily: 'Jost',
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    try {
+      // Query Firestore for existing users
+      final querySnapshotUsers = await FirebaseFirestore.instance
+          .collection('users')
+          .where('username', isEqualTo: userName)
+          .get();
+
+      final querySnapshotUsersPending = await FirebaseFirestore.instance
+          .collection('usersPending')
+          .where('username', isEqualTo: userName)
+          .get();
+
+      // Combine the results from both collections
+      final allDocs = querySnapshotUsers.docs + querySnapshotUsersPending.docs;
+
+      if (allDocs.isNotEmpty) {
+        // If user exists, close the loading dialog and show an error dialog
+        Navigator.of(context).pop();
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            contentPadding: EdgeInsets.zero,
+            content: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 300, maxHeight: 150),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF00E5E5), Color(0xFF0057FF)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(10.0),
+                          bottom: Radius.zero,
+                        ),
                       ),
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(10.0),
-                        bottom: Radius.zero,
+                      height: 60,
+                      child: Center(
+                        child: Icon(Icons.error_outline_sharp,
+                            color: Colors.white, size: 30),
                       ),
                     ),
-                    height: 60,
-                    child: Center(
-                      child: Icon(Icons.error_outline_sharp,
-                          color: Colors.white, size: 30),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Text(
+                        'User $userName already taken. Please use another one.',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Jost',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  "OK",
+                  style: TextStyle(
+                    color: Color(0xFF1F5EBD),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      'Username already taken. Please use another one.',
-                      style: TextStyle(
-                        color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // User does not exist, continue registration
+
+        // Close the first loading dialog
+        Navigator.of(context).pop();
+
+        // Show submission loading dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 10),
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0057FF)),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Submitting application...',
+                    style: TextStyle(
                         fontFamily: 'Jost',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16),
                   ),
                 ],
               ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(
-                "OK",
-                style: TextStyle(
-                  color: Color(0xFF1F5EBD),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      // If username is not already in the database, application will be submitted
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(10.0), // Customize the border radius here
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 10),
-                CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0057FF)),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Submitting application...',
-                  style: TextStyle(
-                      fontFamily: 'Jost',
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16),
-                ),
-              ],
-            ),
+            );
+          },
+        );
+
+        // Store user details in Firestore in usersPending collection with a random docID
+        await FirebaseFirestore.instance.collection('usersPending').add({
+          'firstName': firstName.text,
+          'lastName': lastName.text,
+          'username': _userNameController.text,
+          'password': _passwordController.text,
+          'department': department.text,
+          'role': role.text,
+        });
+
+        // Close the submission dialog
+        Navigator.of(context).pop();
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+                    "Application submitted. Wait for the admin's approval")),
           );
-        },
-      );
-
-      // Wait for 2 seconds before closing the dialog and navigating
-      await Future.delayed(Duration(seconds: 2));
-
-      // Dismiss the dialog box
+        }
+      }
+    } catch (e) {
+      // Handle any errors and close the loading dialog
       Navigator.of(context).pop();
-
-
-      // Store user details in Firestore in usersPending collection with a random docID
-      await FirebaseFirestore.instance.collection('usersPending').add({
-        'firstName': firstName.text,
-        'lastName': lastName.text,
-        'username': _userNameController.text,
-        'password': _passwordController.text,
-      });
-      // Proceed with signup
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text("Application submitted. Wait for the admin's approval")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error checking user existence: $e')),
+        );
+      }
     }
   }
 
-void clearText(){
+
+
+
+  void clearText(){
   _textEditingController.clear();
 }
 
@@ -207,7 +263,7 @@ void clearText(){
                       ),
                       Visibility(
                         visible:
-                            firstName.text.isEmpty || lastName.text.isEmpty,
+                            firstName.text.isEmpty || lastName.text.isEmpty || department.text.isEmpty || role.text.isEmpty,
                         child: Text(
                           '*',
                           style: TextStyle(
@@ -310,7 +366,7 @@ void clearText(){
                                     contentPadding:
                                         EdgeInsets.symmetric(vertical: 10.0),
                                     prefixIcon: Icon(Icons.person,
-                                        color: Colors.transparent),
+                                        color: Colors.blue),
                                     hintText: 'Last Name', // Placeholder text
                                     hintStyle: TextStyle(
                                         fontSize: 16,
@@ -334,6 +390,130 @@ void clearText(){
                                     filled: true,
                                     fillColor:
                                         Colors.white
+                                  ),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 16.0,
+                                    fontFamily: 'Jost',
+                                    color: Color(0xFF1F5EBD),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10, width: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                child: TextFormField(
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Enter Department";
+                                    } else {
+                                      bool isValidName =
+                                      RegExp(r'^[a-zA-Z\s]+$')
+                                          .hasMatch(value);
+                                      if (!isValidName) {
+                                        return "Invalid department. It should not\ninclude numbers and symbols";
+                                      }
+                                    }
+                                    return null;
+                                  },
+                                  controller: department,
+                                  decoration: InputDecoration(
+                                      contentPadding:
+                                      EdgeInsets.symmetric(vertical: 10.0),
+                                      prefixIcon: Icon(Icons.maps_home_work_outlined,
+                                          color: Colors.blue),
+                                      hintText: 'Department', // Placeholder text
+                                      hintStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.grey[300],
+                                          fontFamily: 'Jost'),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderSide: BorderSide(color: Colors.transparent),
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderSide:
+                                        BorderSide(color: Colors.transparent),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderSide:
+                                        BorderSide(color: Color(0xFF0057FF)),
+                                      ),
+                                      filled: true,
+                                      fillColor:
+                                      Colors.white
+                                  ),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 16.0,
+                                    fontFamily: 'Jost',
+                                    color: Color(0xFF1F5EBD),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10, width: 20),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                child: TextFormField(
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Enter Department";
+                                    } else {
+                                      bool isValidName =
+                                      RegExp(r'^[a-zA-Z\s]+$')
+                                          .hasMatch(value);
+                                      if (!isValidName) {
+                                        return "Invalid department. It should not\ninclude numbers and symbols";
+                                      }
+                                    }
+                                    return null;
+                                  },
+                                  controller: role,
+                                  decoration: InputDecoration(
+                                      contentPadding:
+                                      EdgeInsets.symmetric(vertical: 10.0),
+                                      prefixIcon: Icon(Icons.construction_sharp,
+                                          color: Colors.blue),
+                                      hintText: 'Role', // Placeholder text
+                                      hintStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.grey[300],
+                                          fontFamily: 'Jost'),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderSide: BorderSide(color: Colors.transparent),
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderSide:
+                                        BorderSide(color: Colors.transparent),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderSide:
+                                        BorderSide(color: Color(0xFF0057FF)),
+                                      ),
+                                      filled: true,
+                                      fillColor:
+                                      Colors.white
                                   ),
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal,
@@ -632,16 +812,20 @@ void clearText(){
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formField.currentState?.validate() ?? false) {
-                            _checkUserExists(_userNameController.text);
+                           await _checkUserExists(_userNameController.text);
+
+                           firstName.clear();
+                           lastName.clear();
+                           department.clear();
+                           role.clear();
+                           _userNameController.clear();
+                           _passwordController.clear();
+                           _confirmPasswordController.clear();
                           }
-                            firstName.clear();
-                            lastName.clear();
-                            _userNameController.clear();
-                            _passwordController.clear();
-                            _confirmPasswordController.clear();
                         },
+
                         style: ButtonStyle(
                           backgroundColor:
                               WidgetStateProperty.resolveWith<Color>(
