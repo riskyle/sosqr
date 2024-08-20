@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'loginScreen.dart';
+import 'package:untitled1/firebase/firebase_options.dart';
+import 'package:untitled1/screens/auth/loginScreen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,8 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MainScreen()
+        home: MainScreen()
     );
   }
 }
-
