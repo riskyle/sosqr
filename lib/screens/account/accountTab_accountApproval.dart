@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -14,6 +15,7 @@ class _AccountApprovalState extends State<AccountApproval> {
   Set<String> _selectedUsers = Set();
   bool _selectAll = false;
   Map<String, bool> _additionalCheckboxMap = {};
+  bool _isShown = false;
 
   void _toggleSelectAll(bool? value) {
     setState(() {
@@ -43,10 +45,132 @@ class _AccountApprovalState extends State<AccountApproval> {
     });
   }
 
+  // need to edit this code NOT DONE
+  Future<void> _notApproveSelectedUsers() async {
+    List<String> usersNotToApprove = [];
+
+    for (var entry in _additionalCheckboxMap.entries) {
+      if (entry.value == true) {
+        usersNotToApprove.add(entry.key);
+      }
+    }
+
+    if (usersNotToApprove.isEmpty) {
+      _showNoUserSelectedDialog();
+      return;
+    }
+
+    bool allUsersNotApproved = true; // Track if all users were not approved
+
+    for (var username in usersNotToApprove) {
+      try {
+        // Fetch additional data from Firestore to approve the users
+        var querySnapshot = await FirebaseFirestore.instance
+            .collection('usersPending')
+            .where('username', isEqualTo: username)
+            .limit(1)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          var userDoc = querySnapshot.docs.first;
+          var userData = userDoc.data();
+
+          // Retrieve necessary fields from userData
+          String firstName = userData['firstName'] ?? '';
+          String lastName = userData['lastName'] ?? '';
+          String password = userData['password'] ?? '';
+          String pictureURL = userData['pictureURL'] ?? '';
+          String accessKey = _selectedAccessMap[username] ?? "";
+          String department = userData['department'] ?? '';
+          String role = userData['role'] ?? '';
+
+          // Check if accessKey is provided
+          if (accessKey.isEmpty) {
+            allUsersNotApproved = false;
+            // Display error message for missing access key
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Error'),
+                  content: Text('User $username cannot be approved without an access key.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(
+                        "OK",
+                        style: TextStyle(
+                          color: Color(0xFF1F5EBD),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+            continue; // Skip this user
+          }
+
+          // Move user from 'usersPending' to 'users'
+          await FirebaseFirestore.instance
+              .collection('usersDecline')
+              .doc(userDoc.id)
+              .set({
+            'username': username,
+            'firstName': firstName,
+            'lastName': lastName,
+            'password': password,
+            'department': department,
+            'role': role,
+          });
+
+          // Remove user from 'usersPending' collection
+          await FirebaseFirestore.instance
+              .collection('usersPending')
+              .doc(userDoc.id)
+              .delete();
+        }
+      } catch (e) {
+        print('Error approving user $username: $e');
+        allUsersNotApproved = false;
+      }
+    }
+
+    // Clear selected checkboxes and refresh UI
+    setState(() {
+      _additionalCheckboxMap.clear();
+      _selectAll = false;
+    });
+
+    if (allUsersNotApproved) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Success'),
+            content: Text('Selected users have been approved and moved to the approved list.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  "OK",
+                  style: TextStyle(
+                    color: Color(0xFF1F5EBD),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   Future<void> _approveSelectedUsers() async {
     List<String> usersToApprove = [];
     for (var entry in _additionalCheckboxMap.entries) {
       if (entry.value == true) {
+        print(entry.key);
         usersToApprove.add(entry.key);
       }
     }
@@ -200,7 +324,7 @@ class _AccountApprovalState extends State<AccountApproval> {
             style: TextStyle(
                 fontFamily: 'Jost',
                 fontWeight: FontWeight.bold,
-                fontSize: 20,
+                fontSize: 27,
                 color: Colors.white)),
         backgroundColor: Color(0xFF0057FF),
         iconTheme: IconThemeData(
@@ -210,7 +334,10 @@ class _AccountApprovalState extends State<AccountApproval> {
         actions: [
           Checkbox(
             value: _selectAll,
-            onChanged: _toggleSelectAll,
+            onChanged: (bool? value) {
+              _isShown = value ?? false;
+              _toggleSelectAll(value);
+            },
             activeColor: Colors.white,
             checkColor: Colors.blue,
           ),
@@ -243,7 +370,6 @@ class _AccountApprovalState extends State<AccountApproval> {
                   userData['pictureURL'] ?? '';
               String department = userData['department'] ?? 'Department';
               String role = userData['role'] ?? 'role';
-
 
               //Initialize the additional checkbox state
 
@@ -841,11 +967,31 @@ class _AccountApprovalState extends State<AccountApproval> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _approveSelectedUsers,
-        child: Icon(Icons.done),
-        tooltip: 'Approve Selected Users',
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Visibility(
+              visible: _isShown,
+              child: FloatingActionButton(
+                onPressed: _approveSelectedUsers,
+                tooltip: 'Approve Selected Users',
+                child: const Icon(Icons.done),
+              ),
+          ),
+          const SizedBox(width: 10.0),
+          Visibility(
+              visible: _isShown,
+              child: FloatingActionButton(
+                onPressed: () {
+
+                },
+                tooltip: 'Unapproved Selected Users',
+                child: const Icon(Icons.not_interested),
+              )
+          ),
+        ],
       ),
+
     );
   }
 }
