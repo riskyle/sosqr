@@ -393,8 +393,8 @@ class _MainScreenState extends State<MainScreen> {
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscureTextPassword
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
                                 color: Colors.grey,
                               ),
                               onPressed: () {
